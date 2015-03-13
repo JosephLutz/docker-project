@@ -3,52 +3,50 @@ $config->addTemplatePath($locwebsvnreal."/templates/calm/");
 $config->addTemplatePath($locwebsvnreal."/templates/BlueGrey/");
 $config->addTemplatePath($locwebsvnreal."/templates/Elegant/");
 
-// $config->useTreeIndex(false); // Tree index, closed by default
+$config->useTreeIndex(false); // Tree index, closed by default
 // $config->useTreeIndex(true); // Tree index, open by default
-// $config->useFlatView(); // load faster
+$config->useFlatView(); // load faster
 // $config->setIgnoreWhitespacesInDiff(true);
-
-// $config->useMultiViews();
 
 // $config->useAuthenticationFile("/path/to/accessfile"); // Global access file
 // $config->useAuthenticationFile("/path/to/accessfile", "myrep"); // Access file for myrep
 
-$config->allowDownload();
-// $config->allowDownload("myrep"); // Specifically allow downloading for "myrep"
-$config->setDefaultFileDlMode("plain");
-$config->setDefaultFolderDlMode("gzip");
-$config->setMinDownloadLevel(2);
-// $config->setMinDownloadLevel(2, "myrep");
-// $config->addAllowedDownloadException("/path/to/allowed/directory/", "myrep");
-// $config->addDisAllowedDownloadException("/path/to/disallowed/directory/", "myrep");
-
-$config->setRssMaxEntries(50);
+$config->setRssMaxEntries(25);
 // $config->setRssMaxEntries(50, "myrep");
 
-// Usually the information to extract the bugtraq information and generate links are
-// stored in SVN properties starting with "bugtraq:":
-// namely "bugtraq:message", "bugtraq:logregex", "bugtraq:url" and "bugtraq:append".
-// To override the SVN properties globally or for individual repositories, uncomment
-// the appropriate line below (replacing "myrep" with the name of the repository).
+
+// {{{ BUGTRAQ ---
+// Uncomment this line to use bugtraq: properties to show links to your BugTracker
+// from log messages.
 // $config->setBugtraqEnabled(true);
-// $config->setBugtraqProperties("bug #%BUGID%", "issues? (\d+)([, ] *(\d+))*"."\n"."(\d+)", "http://www.example.com/issues/show_bug.cgi?id=%BUGID%", false);
-// $config->setBugtraqProperties("bug #%BUGID%", "issues? (\d+)([, ] *(\d+))*"."\n"."(\d+)", "http://www.example.com/issues/show_bug.cgi?id=%BUGID%", false, "myrep");
+// To override the global setting for individual repositories, uncomment and replicate
+// the appropriate line below (replacing 'myrep' with the name of the repository).
+// Use the convention 'groupname.myrep' if your repository is in a group.
+// $config->setBugtraqEnabled(true,  'myrep');
+// $config->setBugtraqEnabled(false, 'myrep');
+// Usually the information to extract the bugtraq information and generate links are
+// stored in SVN properties starting with 'bugtraq:':
+// namely 'bugtraq:message', 'bugtraq:logregex', 'bugtraq:url' and 'bugtraq:append'.
+// To override the SVN properties globally or for individual repositories, uncomment
+// the appropriate line below (replacing 'myrep' with the name of the repository).
+// $config->setBugtraqProperties('bug #%BUGID%', 'issues? (\d+)([, ] *(\d+))*'."\n".'(\d+)', 'http://www.example.com/issues/s    how_bug.cgi?id=%BUGID%', false);
+// $config->setBugtraqProperties('bug #%BUGID%', 'issues? (\d+)([, ] *(\d+))*'."\n".'(\d+)', 'http://www.example.com/issues/s    how_bug.cgi?id=%BUGID%', false, 'myrep');
+// }}}
 
-// $config->setTrustServerCert();
+// {{{ PLATFORM CONFIGURATION ---
+// Configure the path for Subversion to use for --config-dir
+// (e.g. if accepting certificates is required when using repositories via https)
 // $config->setSvnConfigDir("/tmp");
-
-// $config->setSVNCommandPath("Path/to/svn/command/"); //  e.g. c:\\program files\\subversion\\bin
-// $config->setDiffPath("Path/to/diff/command/");
-$config->setSedPath("/bin");
-// $config->setTarPath("Path/to/tar/command/");
-// $config->setGZipPath("Path/to/gzip/command/");
-// $config->setZipPath("Path/to/zip/command/");
+// Uncomment this line to trust server certificates
+// This may useful if you use self-signed certificates and have no chance to accept the certificate once via cli
+// $config->setTrustServerCert();
+// }}}
 
 $config->useEnscript();
 $config->setEnscriptPath("/usr/bin");
-// $extEnscript[".pas"] = "pascal";
-// $config->useGeshi();
-// $extGeshi["pascal"] = array("p", "pas");
+$config->setSedPath("/bin");
+
+# $config->setShowAgeInsteadOfDate(false);
 
 $config->expandTabsBy(8);
 $config->setBlockRobots();
