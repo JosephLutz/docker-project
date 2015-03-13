@@ -6,9 +6,9 @@ source config.sh
 # ************************************************************
 # create docker images
 docker build --rm=true --tag="websvn_image" ${CWD}/websvn
-docker build --rm=true --tag="websvn_ssl_data" --file="Dockerfile.ssl" ${CWD}/data_container
-docker build --rm=true --tag="websvn_password_data" --file="Dockerfile.websvn_password" ${CWD}/data_container
-docker build --rm=true --tag="websvn_svn_data" --file="Dockerfile.svndata" ${CWD}/data_container
+docker build --rm=true --tag="websvn_ssl_data" ${CWD}/data_container/websvn_ssl_data
+docker build --rm=true --tag="websvn_password_data" ${CWD}/data_container/websvn_password_data
+docker build --rm=true --tag="websvn_svn_data" ${CWD}/data_container/websvn_svn_data
 
 # ************************************************************
 # create the data volumes
