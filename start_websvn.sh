@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 CWD=$(pwd)
 
 source config.sh
