@@ -13,3 +13,7 @@ HOST_HTPASSMAN_PASSWD_DIR=$(pwd)/data/htpassman_password
 
 DJANGO_IP=172.16.0.103
 HOST_DJANGO_DIR=$(pwd)/code
+
+TESTSTATION_IP=172.16.0.104
+HOST_TESTSTATION_MYSQL_DATA_DIR=$(pwd)/teststation_mysql/data
+HOST_TESTSTATION_DJANGO_CODE_DIR=$(pwd)/httpd_django/Build_System_Code
