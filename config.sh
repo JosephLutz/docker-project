@@ -1,9 +1,15 @@
-BACKUP_DIR=/home/josephl/SVN
+HOST_BACKUP_DIR=$(pwd)/SVN
 SVN_EXPORT_PATH=/tmp/import_export
-SVN_REPOS="ddio novatech NCD_Release"
-WEBSVN_IP=172.16.71.110
+SVN_REPOS=("ddio" "novatech" "NCD_Release")
 
-HOST_SVN_DIR=$(pwd)/svn
-HOST_SSL_DIR=$(pwd)/ssl
-HOST_WEBSVN_PASSWD_DIR=$(pwd)/websvn_password
-mkdir -p ${HOST_SVN_DIR} ${HOST_SSL_DIR} ${HOST_WEBSVN_PASSWD_DIR}
+WEBSVN_IP=172.20.71.110
+HOST_SVN_DIR=$(pwd)/data/websvn_svn
+HOST_WEBSVN_SSL_DIR=$(pwd)/data/websvn_ssl
+HOST_WEBSVN_PASSWD_DIR=$(pwd)/data/websvn_password
+
+HTPASSMAN_IP=172.20.71.111
+HOST_HTPASSMAN_SSL_DIR=$(pwd)/data/htpassman_ssl
+HOST_HTPASSMAN_PASSWD_DIR=$(pwd)/data/htpassman_password
+
+DJANGO_IP=172.20.71.112
+HOST_DJANGO_DIR=$(pwd)/code

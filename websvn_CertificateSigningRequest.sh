@@ -11,7 +11,7 @@ backup)
   [[ -z "${FILE_PATH}" ]] && exit -1
   # Copy certificate from inplace to the import/export path
   docker run -it --rm \
-    -v ${HOST_SSL_DIR}:/etc/apache2/ssl \
+    -v ${HOST_WEBSVN_SSL_DIR}:/etc/apache2/ssl \
     -v ${FILE_PATH}:${SVN_EXPORT_PATH} \
     websvn_image \
       cp /etc/apache2/ssl/apache.key /etc/apache2/ssl/apache.pem ${FILE_PATH}/
@@ -25,7 +25,7 @@ import)
   [[ -z "${FILE_PATH}" ]] && exit -1
   # Copy certificate from import/export path into place
   docker run -it --rm \
-    -v ${HOST_SSL_DIR}:/etc/apache2/ssl \
+    -v ${HOST_WEBSVN_SSL_DIR}:/etc/apache2/ssl \
     -v ${FILE_PATH}:${SVN_EXPORT_PATH} \
     websvn_image \
       cp ${FILE_PATH}/apache.key ${FILE_PATH}/apache.pem /etc/apache2/ssl/
@@ -36,7 +36,7 @@ import)
   #    cp ${FILE_PATH}/apache.key ${FILE_PATH}/apache.pem /etc/apache2/ssl/
   # change permissions on generated self signed certificate
   docker run -ti --rm \
-    -v ${HOST_SSL_DIR}:/etc/apache2/ssl \
+    -v ${HOST_WEBSVN_SSL_DIR}:/etc/apache2/ssl \
     websvn_image \
       chmod 600 /etc/apache2/ssl/apache.pem /etc/apache2/ssl/apache.key
   #docker run -ti --rm \
@@ -47,7 +47,7 @@ import)
 gen_self_signed)
   # generate self signed certificate
   docker run -ti --rm \
-    -v ${HOST_SSL_DIR}:/etc/apache2/ssl \
+    -v ${HOST_WEBSVN_SSL_DIR}:/etc/apache2/ssl \
     websvn_image \
       openssl req -newkey rsa:2048 -x509 -days 365 -nodes \
         -keyout /etc/apache2/ssl/apache.key \
@@ -62,7 +62,7 @@ gen_self_signed)
   #      -subj "/C=US/ST=Kansas/L=Lenexa/O=Novatech/CN=websvn.novatech-llc.com"
   # change permissions on generated self signed certificate
   docker run -ti --rm \
-    -v ${HOST_SSL_DIR}:/etc/apache2/ssl \
+    -v ${HOST_WEBSVN_SSL_DIR}:/etc/apache2/ssl \
     websvn_image \
       chmod 600 /etc/apache2/ssl/apache.pem /etc/apache2/ssl/apache.key
   #docker run -ti --rm \

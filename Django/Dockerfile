@@ -12,32 +12,27 @@ ENV SVN_EXPORT_PATH "/tmp/import_export"
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --yes \
     apache2 \
-    enscript \
-    libapache2-svn \
+    libapache2-mod-fcgid \
     openssl \
-    php5-common \
-    subversion \
-    websvn && \
+    python2.7 \
+    python-django && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 # copy over scripts
 COPY ["./scripts/docker-entrypoint.sh", \
 	"./scripts/configure.sh", \
-	"./scripts/import_svn.sh", \
-	"./scripts/export_svn.sh", \
 		"/"]
 
 # Set the configuration
-COPY ["config/000-websvn.conf", "config/000-websvn-ssl.conf", "/etc/apache2/sites-available/"]
-COPY ["config/config.php", "/etc/websvn/"]
+COPY ["config/000-django.conf", "config/000-django-ssl.conf", "/etc/apache2/sites-available/"]
 RUN ["/bin/bash", "/configure.sh"]
 
 # specify which network ports will be used
-#EXPOSE 80 443
-EXPOSE 443
+EXPOSE 80 443
+#EXPOSE 443
 
 # start apache running
-WORKDIR /var/www/html
+WORKDIR /var/lib/django
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["websvn"]

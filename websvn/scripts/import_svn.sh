@@ -3,7 +3,7 @@ set -e
 
 SVN_BASE_DIR=/var/lib/svn
 SVN_EXPORT_PATH=${1}
-shift ; shift
+shift
 
 # make certain the SVN directory exists
 [[ ! -d ${SVN_BASE_DIR} ]] && mkdir -p ${SVN_BASE_DIR}

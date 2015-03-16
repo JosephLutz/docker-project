@@ -3,9 +3,9 @@ CWD=$(pwd)
 
 source config.sh
 
-docker run -d --name websvn -P -p ${WEBSVN_IP}:443:443 \
+docker run -d --name websvn --restart=always -P -p ${WEBSVN_IP}:443:443 \
   -v ${HOST_SVN_DIR}:/var/lib/svn \
-  -v ${HOST_SSL_DIR}:/etc/apache2/ssl \
+  -v ${HOST_WEBSVN_SSL_DIR}:/etc/apache2/ssl \
   -v ${HOST_WEBSVN_PASSWD_DIR}:/etc/apache2/websvn_password \
   websvn_image
 
