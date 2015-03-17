@@ -12,13 +12,13 @@ source config.sh
 #mkdir -p ${HOST_HTPASSMAN_SSL_DIR} ${HOST_HTPASSMAN_PASSWD_DIR}
 
 # ************************************************************
-# create docker images
-docker build --rm=true --tag="my_sqld" ${CWD}/teststation_mysql
-docker build --rm=true --tag="httpd_2" ${CWD}/httpd_django
+# create sudo docker images
+sudo docker build --rm=true --tag="my_sqld" ${CWD}/teststation_mysql
+sudo docker build --rm=true --tag="httpd_2" ${CWD}/httpd_django
 
 # ************************************************************
 # create the data volumes
-#docker run --name name_data_volume name_data
+#sudo docker run --name name_data_volume name_data
 
 # ************************************************************
 # populate the data volumes with their data
@@ -27,7 +27,7 @@ docker build --rm=true --tag="httpd_2" ${CWD}/httpd_django
 #${CWD}/websvn_CertificateSigningRequest.sh gen_self_signed
 
 # create the first user for access to WebSVN
-#docker run -ti --rm \
+#sudo docker run -ti --rm \
 #  -v ${HOST_WEBSVN_PASSWD_DIR}:/etc/apache2/websvn_password \
 #  websvn_image \
 #    /bin/bash -c \

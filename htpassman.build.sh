@@ -6,12 +6,12 @@ CWD=$(pwd)
 source config.sh
 
 # ************************************************************
-# create docker images
-docker build --rm=true --tag="htpassman_image" ${CWD}/htpassman
+# create sudo docker images
+sudo docker build --rm=true --tag="htpassman_image" ${CWD}/htpassman
 
 # ************************************************************
 # create the data volumes
-#docker run --name htpassman_password_data_volume htpassman_password_data
+#sudo docker run --name htpassman_password_data_volume htpassman_password_data
 
 # ************************************************************
 # populate the data volumes with their data
@@ -20,7 +20,7 @@ docker build --rm=true --tag="htpassman_image" ${CWD}/htpassman
 ${CWD}/websvn_CertificateSigningRequest.sh gen_self_signed
 
 # create the first user for access to WebSVN
-docker run -ti --rm \
+sudo docker run -ti --rm \
   -v ${HOST_WEBSVN_PASSWD_DIR}:/etc/apache2/websvn_password \
   htpassman_image \
     /bin/bash -c \
@@ -33,7 +33,7 @@ docker run -ti --rm \
 # ************************************************************
 # Start WebSVN for running on the linuxserver
 
-docker run -d --name htpassman --restart=always -P -p ${HTPASSMAN_IP}:443:443 -p ${HTPASSMAN_IP}:80:80 \
+sudo docker run -d --name htpassman --restart=always -P -p ${HTPASSMAN_IP}:443:443 -p ${HTPASSMAN_IP}:80:80 \
   -v ${HOST_HTPASSMAN_SSL_DIR}:/etc/apache2/ssl \
   -v ${HOST_HTPASSMAN_PASSWD_DIR}:/etc/apache2/htpassman_password \
   htpassman_image

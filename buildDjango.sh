@@ -13,12 +13,12 @@ source config.sh
 mkdir -p ${HOST_DJANGO_DIR}
 
 # ************************************************************
-# create docker images
-docker build --rm=true --tag="django_image" ${CWD}/Django
+# create sudo docker images
+sudo docker build --rm=true --tag="django_image" ${CWD}/Django
 
 # ************************************************************
 # create the data volumes
-#docker run --name name_data_volume name_data
+#sudo docker run --name name_data_volume name_data
 
 # ************************************************************
 # populate the data volumes with their data
@@ -27,7 +27,7 @@ docker build --rm=true --tag="django_image" ${CWD}/Django
 #${CWD}/websvn_CertificateSigningRequest.sh gen_self_signed
 
 # create the first user for access to WebSVN
-#docker run -ti --rm \
+#sudo docker run -ti --rm \
 #  -v ${HOST_WEBSVN_PASSWD_DIR}:/etc/apache2/websvn_password \
 #  websvn_image \
 #    /bin/bash -c \
@@ -41,6 +41,6 @@ docker build --rm=true --tag="django_image" ${CWD}/Django
 # Start WebSVN for running on the linuxserver
 #${CWD}/start_websvn.sh
 exit 0
-docker run -ti --rm -P -p ${DJANGO_IP}:443:443 -p ${DJANGO_IP}:80:80 \
+sudo docker run -ti --rm -P -p ${DJANGO_IP}:443:443 -p ${DJANGO_IP}:80:80 \
   -v ${HOST_DJANGO_DIR}:/var/lib/django \
   django_image /bin/bash
