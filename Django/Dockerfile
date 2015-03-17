@@ -20,12 +20,12 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 # copy over scripts
-COPY ["./scripts/docker-entrypoint.sh", \
-	"./scripts/configure.sh", \
-		"/"]
+COPY ./scripts/docker-entrypoint.sh \
+        ./scripts/configure.sh" \
+            /
 
 # Set the configuration
-COPY ["config/000-django.conf", "config/000-django-ssl.conf", "/etc/apache2/sites-available/"]
+COPY config/000-django.conf config/000-django-ssl.conf /etc/apache2/sites-available/
 RUN ["/bin/bash", "/configure.sh"]
 
 # specify which network ports will be used

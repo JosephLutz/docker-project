@@ -22,15 +22,15 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 # copy over scripts
-COPY ["./scripts/docker-entrypoint.sh", \
-	"./scripts/configure.sh", \
-	"./scripts/import_svn.sh", \
-	"./scripts/export_svn.sh", \
-		"/"]
+COPY ./scripts/docker-entrypoint.sh \
+	./scripts/configure.sh \
+	./scripts/import_svn.sh \
+	./scripts/export_svn.sh \
+		/
 
 # Set the configuration
-COPY ["config/000-websvn.conf", "config/000-websvn-ssl.conf", "/etc/apache2/sites-available/"]
-COPY ["config/config.php", "/etc/websvn/"]
+COPY config/000-websvn.conf config/000-websvn-ssl.conf /etc/apache2/sites-available/
+COPY config/config.php /etc/websvn/
 RUN ["/bin/bash", "/configure.sh"]
 
 # specify which network ports will be used

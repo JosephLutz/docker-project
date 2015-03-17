@@ -22,13 +22,13 @@ RUN mkdir -p /usr/src/htpassman \
     && chown www-data:www-data /usr/src/htpassman/*
 
 # Set the configuration
-COPY ["config/000-htpassman.conf", "config/000-htpassman-ssl.conf", "/etc/apache2/sites-available/"]
-COPY ["config/params.rb", "/usr/src/htpassman/"]
+COPY config/000-htpassman.conf config/000-htpassman-ssl.conf /etc/apache2/sites-available/
+COPY config/params.rb /usr/src/htpassman/
 
 # copy over scripts
-COPY ["./scripts/docker-entrypoint.sh", \
-	"./scripts/configure.sh", \
-		"/"]
+COPY ./scripts/docker-entrypoint.sh \
+	/scripts/configure.sh \
+		/
 RUN ["/bin/bash", "/configure.sh"]
 
 # specify which network ports will be used
