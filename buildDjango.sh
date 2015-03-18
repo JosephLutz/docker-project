@@ -7,9 +7,6 @@ source config.sh
 
 # ************************************************************
 # make certain the host directories exist
-#mkdir -p ${HOST_BACKUP_DIR}
-#mkdir -p ${HOST_SVN_DIR} ${HOST_WEBSVN_SSL_DIR} ${HOST_WEBSVN_PASSWD_DIR}
-#mkdir -p ${HOST_HTPASSMAN_SSL_DIR} ${HOST_HTPASSMAN_PASSWD_DIR}
 mkdir -p ${HOST_DJANGO_DIR}
 
 # ************************************************************

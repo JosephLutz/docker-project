@@ -6,12 +6,6 @@ CWD=$(pwd)
 source config.sh
 
 # ************************************************************
-# make certain the host directories exist
-#mkdir -p ${HOST_BACKUP_DIR}
-#mkdir -p ${HOST_SVN_DIR} ${HOST_WEBSVN_SSL_DIR} ${HOST_WEBSVN_PASSWD_DIR}
-#mkdir -p ${HOST_HTPASSMAN_SSL_DIR} ${HOST_HTPASSMAN_PASSWD_DIR}
-
-# ************************************************************
 # create sudo docker images
 sudo docker build --rm=true --tag="my_sqld" ${CWD}/teststation_mysql
 sudo docker build --rm=true --tag="httpd_2" ${CWD}/httpd_django
