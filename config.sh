@@ -1,9 +1,9 @@
-SVN_REPOS=("ddio" "novatech" "NCD_Release")
-
+# Variables for WebSVN and SVN
 WEBSVN_IP=172.16.0.101
 HOST_SVN_DIR=$(pwd)/data/websvn_svn
 HOST_WEBSVN_SSL_DIR=$(pwd)/data/websvn_ssl
 HOST_WEBSVN_PASSWD_DIR=$(pwd)/data/websvn_password
+SVN_REPOS=("ddio" "novatech" "NCD_Release")
 
 HTPASSMAN_IP=172.16.0.102
 HOST_HTPASSMAN_SSL_DIR=$(pwd)/data/htpassman_ssl
