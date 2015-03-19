@@ -127,7 +127,7 @@ case ${1} in
         chmod 600 \
             ${WEBSVN_PASSWD_BASE_DIR}/${WEBSVN_PASSWD_FILENAME}
         chown www-data:www-data \
-            ${WEBSVN_PASSWD_BASE_DIR}/${WEBSVN_PASSWD_FILENAME
+            ${WEBSVN_PASSWD_BASE_DIR}/${WEBSVN_PASSWD_FILENAME}
         ;;
 
     ssl_generate)
