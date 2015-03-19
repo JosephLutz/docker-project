@@ -6,13 +6,13 @@
 FROM ubuntu:14.04
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
-ENV SVN_EXPORT_PATH "/tmp/import_export"
+ENV IMPORT_EXPORT_PATH "/tmp/import_export"
 
 VOLUME ["/var/lib/svn", "/etc/apache2/ssl", "/etc/apache2/websvn_password"]
 
 # install the required packages and cleanup the install
 RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install --yes \
+  DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
     apache2 \
     enscript \
     libapache2-svn \
@@ -24,10 +24,8 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 # copy over scripts
-COPY ./scripts/docker-entrypoint.sh \
-	./scripts/configure.sh \
-	./scripts/import_svn.sh \
-	./scripts/export_svn.sh \
+COPY ./docker-entrypoint.sh \
+	./configure.sh \
 		/
 
 # Set the configuration

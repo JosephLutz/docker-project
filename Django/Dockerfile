@@ -6,8 +6,6 @@
 FROM ubuntu:14.04
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
-ENV SVN_EXPORT_PATH "/tmp/import_export"
-
 # install the required packages and cleanup the install
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install --yes \

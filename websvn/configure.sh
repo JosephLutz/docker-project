@@ -5,6 +5,10 @@ SVN_BASE_DIR=/var/lib/svn
 # Create a directory for a dead symlink
 mkdir /var/cache/websvn/tmp
 
+# Create the apache user and group
+groupadd --system www-data && \
+    useradd --system --base-dir /var/www/html --gid www-data www-data
+
 # comment out apache2 config file lines that refrence the environment variables
 sed -ie 's/^Mutex file/#Mutex file/' /etc/apache2/apache2.conf
 sed -ie 's/^PidFile /#PidFile /' /etc/apache2/apache2.conf
