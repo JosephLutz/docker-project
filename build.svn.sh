@@ -39,6 +39,7 @@ sudo docker run -ti --rm \
 # Import SVN repositories
 sudo docker run -ti --rm \
   --volumes-from data_volume_websvn_svn \
+  -v ${HOST_BACKUP_DIR}:/tmp/import_export \
   image_websvn svn_import ${SVN_REPOS[*]}
 
 # ************************************************************
