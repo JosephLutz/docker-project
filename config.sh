@@ -1,4 +1,3 @@
-HOST_BACKUP_DIR=$(pwd)/SVN
 SVN_REPOS=("ddio" "novatech" "NCD_Release")
 
 WEBSVN_IP=172.16.0.101
