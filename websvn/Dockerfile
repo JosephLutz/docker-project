@@ -3,10 +3,10 @@
 #
 # Version 0.1
 
-FROM ubuntu:14.04
+FROM debian:8
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
-ENV IMPORT_EXPORT_PATH "/tmp/import_export"
+ENV IMPORT_EXPORT_PATH /tmp/import_export
 
 VOLUME ["/var/lib/svn", "/etc/apache2/ssl", "/etc/apache2/websvn_password"]
 

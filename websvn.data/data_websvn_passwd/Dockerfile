@@ -3,7 +3,7 @@
 #
 # Version 0.0
 
-FROM ubuntu:14.04
+FROM debian:8
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 # create the volumes that will be needed
