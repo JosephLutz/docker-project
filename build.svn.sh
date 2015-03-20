@@ -24,7 +24,7 @@ HOST_BACKUP_DIR=${CWD}/websvn.data/SVN
 
 # ************************************************************
 # create sudo docker images
-sudo docker build --rm=true --tag="image_websvn" ${CWD}/websvn
+sudo docker build --rm=true --tag="image_websvn" ${CWD}/docker-websvn
 
 # ************************************************************
 # create the images for the data volumes

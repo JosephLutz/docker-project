@@ -1,0 +1,3 @@
+[submodule "docker-websvn"]
+	path = docker-websvn
+	url = https://github.com/cipherwizard/docker-websvn.git
