@@ -1,5 +1,5 @@
 #
-# WebSVN (sshd DEBUG) Docker container
+# WebSVN Docker container
 #
 # Version 0.0
 
