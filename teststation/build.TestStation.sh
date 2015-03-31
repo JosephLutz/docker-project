@@ -6,7 +6,7 @@ CWD=$(pwd)
 source config.sh
 
 # ************************************************************
-# create sudo docker images
+# create docker images
 sudo docker build --rm=true --tag="my_sqld" ${CWD}/teststation_mysql
 sudo docker build --rm=true --tag="httpd_2" ${CWD}/httpd_django
 

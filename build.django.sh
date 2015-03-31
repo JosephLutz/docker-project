@@ -10,7 +10,7 @@ source config.sh
 mkdir -p ${HOST_DJANGO_DIR}
 
 # ************************************************************
-# create sudo docker images
+# create docker images
 sudo docker build --rm=true --tag="django_image" ${CWD}/Django
 
 # ************************************************************

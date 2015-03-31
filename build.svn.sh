@@ -23,7 +23,7 @@ source config.sh
 HOST_BACKUP_DIR=${CWD}/websvn.data/SVN
 
 # ************************************************************
-# create sudo docker images
+# create docker images
 sudo docker build --rm=true --tag="image_websvn" ${CWD}/docker-websvn
 
 # ************************************************************

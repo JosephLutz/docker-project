@@ -6,7 +6,7 @@ CWD=$(pwd)
 source config.sh
 
 # ************************************************************
-# create sudo docker images
+# create docker images
 sudo docker build --rm=true --tag="htpassman_image" ${CWD}/htpassman
 
 # ************************************************************
