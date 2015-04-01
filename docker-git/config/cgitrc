@@ -1,0 +1,34 @@
+snapshots=tar.gz tar.bz2 zip
+scan-path=/path/to/your/repositories
+
+#
+# cgit config
+#
+
+css=/cgit-css/cgit.css
+logo=/cgit-css/cgit.png
+
+# if you don't want that webcrawler (like google) index your site
+robots=noindex, nofollow
+
+# if cgit messes up links, use a virtual-root. For example has cgit.example.org/ this value:
+#virtual-root=/cgit/
+
+#
+# List of repositories.
+# This list could be kept in a different file (e.g. '/etc/cgitrepos')
+# and included like this:
+#   include=/etc/cgitrepos
+#
+ # repo.url=MyRepo
+ # repo.path=/srv/git/MyRepo.git
+ # repo.desc=This is my git repository
+#
+# or have cgit search for each repository
+scan-path=GIT_BASE_DIR
+
+# descriptions and owner information like in gitweb
+enable-git-config=1
+
+# use highlight as a source filter
+source-filter=/usr/lib/cgit/filters/syntax-highlighting.sh
