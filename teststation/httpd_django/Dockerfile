@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:14.04
 
 ENV HTTPD_PREFIX /usr/local/apache2
 ENV PATH $PATH:$HTTPD_PREFIX/bin
