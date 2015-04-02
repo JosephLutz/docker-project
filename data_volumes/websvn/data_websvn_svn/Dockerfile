@@ -3,7 +3,7 @@
 #
 # Version 0.0
 
-FROM debian:8
+FROM image_websvn:latest
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 # create the volumes that will be needed
