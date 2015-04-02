@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Example backup commands
-# sudo docker run -ti --rm --volumes-from data_volume_websvn_svn    -v ${HOST_BACKUP_DIR}:/tmp/import_export image_websvn svn_backup
-# sudo docker run -ti --rm --volumes-from data_volume_websvn_ssl    -v ${HOST_BACKUP_DIR}:/tmp/import_export image_websvn ssl_backup
-# sudo docker run -ti --rm --volumes-from data_volume_websvn_passwd -v ${HOST_BACKUP_DIR}:/tmp/import_export image_websvn passwd_backup
+# sudo docker run -ti --rm --volumes-from data_volume_websvn_svn    -v ${HOST_SVN_BACKUP_DIR}:/tmp/import_export image_websvn svn_backup
+# sudo docker run -ti --rm --volumes-from data_volume_websvn_ssl    -v ${HOST_SVN_BACKUP_DIR}:/tmp/import_export image_websvn ssl_backup
+# sudo docker run -ti --rm --volumes-from data_volume_websvn_passwd -v ${HOST_SVN_BACKUP_DIR}:/tmp/import_export image_websvn passwd_backup
 # Example import commands
-# sudo docker run -ti --rm --volumes-from data_volume_websvn_svn    -v ${HOST_BACKUP_DIR}:/tmp/import_export image_websvn svn_import
-# sudo docker run -ti --rm --volumes-from data_volume_websvn_ssl    -v ${HOST_BACKUP_DIR}:/tmp/import_export image_websvn ssl_import
-# sudo docker run -ti --rm --volumes-from data_volume_websvn_passwd -v ${HOST_BACKUP_DIR}:/tmp/import_export image_websvn passwd_import
+# sudo docker run -ti --rm --volumes-from data_volume_websvn_svn    -v ${HOST_SVN_BACKUP_DIR}:/tmp/import_export image_websvn svn_import
+# sudo docker run -ti --rm --volumes-from data_volume_websvn_ssl    -v ${HOST_SVN_BACKUP_DIR}:/tmp/import_export image_websvn ssl_import
+# sudo docker run -ti --rm --volumes-from data_volume_websvn_passwd -v ${HOST_SVN_BACKUP_DIR}:/tmp/import_export image_websvn passwd_import
 # Example initial create
 # sudo docker run -ti --rm --volumes-from data_volume_websvn_svn    image_websvn svn_import repos_name_1 repos_name_2 repos_name_3 repos_name_4
 # sudo docker run -ti --rm --volumes-from data_volume_websvn_ssl    image_websvn ssl_generate
@@ -54,7 +54,7 @@ sudo docker run -ti --rm \
 # Import SVN repositories
 sudo docker run -ti --rm \
   --volumes-from data_volume_websvn_svn \
-  -v ${HOST_BACKUP_DIR}:/tmp/import_export \
+  -v ${HOST_SVN_BACKUP_DIR}:/tmp/import_export \
   image_websvn svn_import ${SVN_REPOS[*]}
 
 # ************************************************************
