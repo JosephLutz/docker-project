@@ -3,21 +3,18 @@ set -e
 
 GIT_BASE_DIR=/var/lib/git
 SSL_BASE_DIR=/etc/apache2/ssl
-GIT_PASSWD_BASE_DIR=/etc/apache2/git_password
-GIT_PASSWD_FILENAME=dav_git.passwd
+GIT_PASSWD_BASE_DIR=/etc/htpasswd/
+GIT_PASSWD_FILENAME=git.passwd
 
 # ************************************************************
 # Options passed to the docker container to run scripts
 # ************************************************************
-# git            : Starts apache running. This is the containers default
-# git_backup      : archives the git repositories into the IMPORT_EXPORT_PATH
-# ssl_backup      : archives the certificate authority into the IMPORT_EXPORT_PATH
-# passwd_backup   : archives the httpasswd file into the IMPORT_EXPORT_PATH
-# git_import      : import and create git repositories from arguments and the IMPORT_EXPORT_PATH
-# ssl_import      : imports the certificate authority from the IMPORT_EXPORT_PATH
-# passwd_import   : imports the httpasswd file from the IMPORT_EXPORT_PATH
-# ssl_generate    : generates a self signed certificate authority
-# passwd_generate : creates an initial httpasswd file with the novatech user
+# git               : Starts apache running. This is the containers default
+# git_backup        : archives the git repositories into the IMPORT_EXPORT_PATH
+# git_restore       : restore all repositories inside the IMPORT_EXPORT_PATH
+# ssl_generate      : generates a self signed certificate authority
+# passwd_generate   : creates an initial httpasswd file with the novatech user
+# new_repository    : creates a new bare repository named from remaining arguments
 
 case ${1} in
     'git')
@@ -32,102 +29,37 @@ case ${1} in
         for repo_path in ${GIT_BASE_DIR}/*
         do
             repo_name=$(basename ${repo_path})
-            if [[ ! -f ${repo_path}/format ]] ; then
+            if [[ ! -f ${repo_path}/config ]] ; then
                 continue
             fi
-            if [[ -f ${IMPORT_EXPORT_PATH}/${repo_name}.gitdump.gz ]] ; then
-                rm -f ${IMPORT_EXPORT_PATH}/${repo_name}.gitdump.gz
+            if [[ -f ${IMPORT_EXPORT_PATH}/${repo_name} ]] ; then
+                rm -f ${IMPORT_EXPORT_PATH}/${repo_name}
             fi
-#            /usr/bin/gitadmin dump ${repo_path} | gzip -9 > \
-#                ${IMPORT_EXPORT_PATH}/${repo_name}.gitdump.gz
+            git clone --mirror ${repo_path} ${IMPORT_EXPORT_PATH}/${repo_name}
         done
         ;;
 
-    ssl_backup)
-        # command to export the certificate authority for backup
-        cp \
-            ${SSL_BASE_DIR}/apache.key \
-            ${SSL_BASE_DIR}/apache.pem \
-              ${IMPORT_EXPORT_PATH}/
-        ;;
-
-    passwd_backup)
-        # command to export the httpasswd file for backup
-        cp \
-            ${GIT_PASSWD_BASE_DIR}/${GIT_PASSWD_FILENAME} \
-              ${IMPORT_EXPORT_PATH}/
-        ;;
-
-    git_import)
-        # ignore first argument and get list of repositories to create
-        shift
-        GIT_REPOSITORIES=(${*})
-        # make certain the GIT directory exists
-        [[ ! -d ${GIT_BASE_DIR} ]] && mkdir -p ${GIT_BASE_DIR}
-        # reset DAV_GIT configuration
-        [[ -e ${GIT_BASE_DIR}/dav_git.conf ]] && rm -f ${GIT_BASE_DIR}/dav_git.conf
-        touch ${GIT_BASE_DIR}/dav_git.conf
-#        # Create GIT repositories
-#        for repo_name in ${GIT_REPOSITORIES[*]} ; do
-#            [[ ! -f ${GIT_BASE_DIR}/${repo_name}/format ]] && \
-#                gitadmin create --fs-type=fsfs ${GIT_BASE_DIR}/${repo_name}
-#        done
-#         Import gitdump archived GIT repositories
-#        for filename in ${IMPORT_EXPORT_PATH}/*.gitdump.gz
-#        do
-#            if [[ ! -e ${filename} ]] ; then
-#                continue
-#            fi
-#            repo_name=$(basename ${filename} | sed -e 's/\.gitdump\.gz//')
-#            if [[ -d ${GIT_BASE_DIR}/${repo_name} ]] ; then
-#                rm -rf ${GIT_BASE_DIR}/${repo_name}
-#            fi
-#            /usr/bin/gitadmin create ${GIT_BASE_DIR}/${repo_name}
-#            /bin/gunzip --stdout ${filename} | \
-#                /usr/bin/gitadmin load ${GIT_BASE_DIR}/${repo_name}
-#        done
-#        # Examine repository and setup it's dav_git config
-#        for repo_path in ${GIT_BASE_DIR}/* ; do
-#            if [[ -f ${repo_path}/format ]]
-#            then
-#                # Create DAV_GIT entry for the repository
-#                echo "<Location /"$(basename ${repo_path})">
-#  DAV git
-#  GITPath "${repo_path}"
-#  AuthName 'Subversion Repository'
-#  AuthType Basic
-#  AuthUserFile /etc/apache2/git_password/dav_git.passwd
-#  Require valid-user
-#  SSLRequireSSL
-#</Location>
-#" >> ${GIT_BASE_DIR}/dav_git.conf
-#                # change permissions on git repositories
-#                chown -R www-data:www-data ${repo_path}
-#            fi
-#        done
-        ;;
-
-    ssl_import)
-        # commands to import the certificate authority
-        cp  ${IMPORT_EXPORT_PATH}/apache.key \
-            ${IMPORT_EXPORT_PATH}/apache.pem \
-              ${SSL_BASE_DIR}/
-        chmod 600 \
-            ${SSL_BASE_DIR}/apache.key \
-            ${SSL_BASE_DIR}/apache.pem
-        chown www-data:www-data \
-            ${SSL_BASE_DIR}/apache.key \
-            ${SSL_BASE_DIR}/apache.pem
-        ;;
-
-    passwd_import)
-        # commands to import the httpasswd file
-        cp  ${IMPORT_EXPORT_PATH}/${GIT_PASSWD_FILENAME} \
-              ${GIT_PASSWD_BASE_DIR}/
-        chmod 600 \
-            ${GIT_PASSWD_BASE_DIR}/${GIT_PASSWD_FILENAME}
-        chown www-data:www-data \
-            ${GIT_PASSWD_BASE_DIR}/${GIT_PASSWD_FILENAME}
+    git_restore)
+        # Remove any git repositories currently in existance
+        [[ ! -d ${GIT_BASE_DIR} ]] && rm -rf ${GIT_BASE_DIR}/*.git
+        # Import mirrored GIT repositories
+        for backup_repo_path in ${IMPORT_EXPORT_PATH}/*.git
+        do
+            if [[ ! -d ${backup_repo_path} ]] ; then
+                continue
+            fi
+            repo_name=$(basename ${backup_repo_path})
+            if [[ -d ${GIT_BASE_DIR}/${repo_name} ]] ; then
+                rm -rf ${GIT_BASE_DIR}/${repo_name}
+            fi
+            git clone --mirror ${backup_repo_path} ${GIT_BASE_DIR}/${repo_name}
+            pushd ${GIT_BASE_DIR}/${repo_name}
+            git update-server-info
+            popd
+        done
+        # make certain repositories are part of the www-data group and readable by apache
+        chgrp -R www-data ${GIT_BASE_DIR}
+        chown www-data ${GIT_BASE_DIR}
         ;;
 
     ssl_generate)
@@ -136,22 +68,27 @@ case ${1} in
         if [[ ! -z "${2}" ]] ; then
             SUBJ=${2}
         fi
+        apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+            openssl
         openssl req -newkey rsa:2048 -x509 -days 365 -nodes \
-            -keyout ${SSL_BASE_DIR}/apache.key \
-            -out ${SSL_BASE_DIR}/apache.pem \
+            -keyout ${SSL_BASE_DIR}/git.key \
+            -out ${SSL_BASE_DIR}/git.pem \
             -subj "${SUBJ}"
         chmod 600 \
-            ${SSL_BASE_DIR}/apache.key \
-            ${SSL_BASE_DIR}/apache.pem
+            ${SSL_BASE_DIR}/git.key \
+            ${SSL_BASE_DIR}/git.pem
         chown www-data:www-data \
-            ${SSL_BASE_DIR}/apache.key \
-            ${SSL_BASE_DIR}/apache.pem
+            ${SSL_BASE_DIR}/git.key \
+            ${SSL_BASE_DIR}/git.pem
         ;;
 
     passwd_generate)
         # commands to generate an initial user in the htpasswd file
         #     Username : novatech
         #     Password : novatech
+        chown root:www-data ${GIT_PASSWD_BASE_DIR}
+        chmod 770 ${GIT_PASSWD_BASE_DIR}
         apt-get update
         DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
             apache2-utils
@@ -159,7 +96,28 @@ case ${1} in
             ${GIT_PASSWD_BASE_DIR}/${GIT_PASSWD_FILENAME} \
             novatech novatech
         chown www-data:www-data \
-            ${GIT_PASSWD_BASE_DIR}/${GIT_PASSWD_FILENAME} \
+            ${GIT_PASSWD_BASE_DIR}/${GIT_PASSWD_FILENAME}
+        ;;
+
+    new_repository)
+        # ignore first argument and get list of repositories to create
+        shift
+        NEW_GIT_REPOSITORIES=(${*})
+        for repo_name in ${NEW_GIT_REPOSITORIES[*]}
+        do
+            if [[ -d ${GIT_BASE_DIR}/${repo_name} ]] ; then
+                echo "Repository already exists: ${repo_name}"
+            fi
+            # create new bare repository
+            mkdir ${GIT_BASE_DIR}/${repo_name}.git
+            pushd ${GIT_BASE_DIR}/${repo_name}.git
+            git init --bare --shared=group
+            git update-server-info
+            popd
+        done
+        # make certain repositories are part of the www-data group and readable by apache
+        chgrp -R www-data ${GIT_BASE_DIR}
+        chown www-data ${GIT_BASE_DIR}
         ;;
 
     *)

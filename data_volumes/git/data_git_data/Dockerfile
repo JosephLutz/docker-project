@@ -7,6 +7,6 @@ FROM image_git:latest
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 # create the volumes that will be needed
-VOLUME ["/etc/apache2/git_password/"]
+VOLUME ["/etc/htpasswd/", "/etc/apache2/ssl"]
 
 CMD ["true"]

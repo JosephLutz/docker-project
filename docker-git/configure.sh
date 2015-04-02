@@ -55,8 +55,8 @@ a2enmod dav_fs
 a2disconf other-vhosts-access-log
 
 # Enable the site
-#a2ensite 000-git-ssl
-a2ensite 000-git
+a2ensite 000-git-ssl
+#a2ensite 000-git
 a2ensite 001-cgit
 #a2ensite 001-gitweb
 
