@@ -100,4 +100,4 @@ VOLUME ["/var/lib/git"]
 # start apache running
 WORKDIR /var/www/html
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["cgit"]
+CMD ["git"]
