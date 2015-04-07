@@ -52,6 +52,7 @@ RUN apt-get update && \
     make get-git && \
     make CGIT_SCRIPT_PATH=/usr/share/cgit prefix=/usr all  && \
     make CGIT_SCRIPT_PATH=/usr/share/cgit prefix=/usr install && \
+    curl http://git-scm.com/favicon.ico > /usr/share/cgit/favicon.ico && \
     mv "/usr/share/cgit/cgit.cgi" "/usr/lib/cgit" && \
     ln -sf ../../lib/cgit/cgit.cgi "/usr/share/cgit/cgit.cgi" && \
     cd /tmp/cgit-${CGIT_VERSION}/git/ && \
@@ -78,20 +79,18 @@ COPY ./docker-entrypoint.sh \
 
 # Set the configuration
 COPY \
-    config/000-git-ssl.conf \
-    config/000-git.conf \
-    config/001-cgit.conf \
-    config/001-gitweb.conf \
+    config/000-default.conf \
+    config/000-default-ssl.conf \
+    config/001-git.conf \
+    config/002-cgit.conf \
         /etc/apache2/sites-available/
 COPY \
     config/cgitrc \
-    config/gitweb.conf \
         /etc/
 RUN ["/bin/bash", "/configure.sh"]
 
 # specify which network ports will be used
 EXPOSE 80 443
-#EXPOSE 443
 
 ENV IMPORT_EXPORT_PATH /tmp/import_export
 

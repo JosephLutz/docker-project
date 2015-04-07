@@ -22,33 +22,30 @@ source config.sh
 sudo docker build --rm=true --tag="image_git" ${CWD}/docker-git
 
 # ************************************************************
-# create the images for the data volumes
-sudo docker build --rm=true --tag="data_git_data"       ${CWD}/data_volumes/git/data_git_data
-sudo docker build --rm=true --tag="data_git_gitrepo"    ${CWD}/data_volumes/git/data_git_gitrepo
+# create the images for the other data volumes
+sudo docker build --rm=true --tag="data_git_data" ${CWD}/data_volumes/git/data_git_data
 
 # ************************************************************
 # create the data volumes
-sudo docker run --name data_volume_git_data      data_git_data
-sudo docker run --name data_volume_git_gitrepo   data_git_gitrepo
 
-# ************************************************************
-# generate self signed certificate
+# A data volume to hold certificates and passwords
+sudo docker run --name data_volume_git_data    --entrypoint=echo data_git_data "other GIT data"
+
+#     generate self signed certificate - "other GIT data"
 sudo docker run -ti --rm \
   --volumes-from data_volume_git_data \
   image_git ssl_generate
 
-# ************************************************************
-# create the first user for access to git
+#     create the first user for access to git - "other GIT data"
 sudo docker run -ti --rm \
   --volumes-from data_volume_git_data \
   image_git passwd_generate
 
-# ************************************************************
-# Import git repositories
-sudo docker run -ti --rm \
-  --volumes-from data_volume_git_gitrepo \
+# A data volume for the git repositories - "GIT repositories"
+FILES_TO_RESTORE=($(cd ${HOST_GIT_BACKUP_DIR};ls -1 *.backup.tar.gz))
+sudo docker run -ti --name data_volume_git_gitrepo \
   -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export \
-  image_git git_restore
+  image_git git_restore ${FILES_TO_RESTORE[*]}
 
 # ************************************************************
 # Start git for running on the linuxserver

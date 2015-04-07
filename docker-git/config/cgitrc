@@ -1,18 +1,121 @@
-snapshots=tar.gz tar.bz2 zip
-scan-path=/path/to/your/repositories
-
 #
 # cgit config
 #
 
+enable-remote-branches=1
+enable-git-config=1
+
+# snapshot archive types: tar.gz tar.bz2 zip
+snapshots=none
+
 css=/cgit-css/cgit.css
 logo=/cgit-css/cgit.png
+
+# Add a cgit favicon
+favicon=/cgit-css/favicon.ico
 
 # if you don't want that webcrawler (like google) index your site
 robots=noindex, nofollow
 
 # if cgit messes up links, use a virtual-root. For example has cgit.example.org/ this value:
 #virtual-root=/cgit/
+
+# descriptions and owner information like in gitweb
+enable-git-config=1
+
+# Enable ASCII art commit history graph on the log pages
+enable-commit-graph=1
+
+# use web_dav for cloning/pull/push
+enable-http-clone=0
+
+# Show extra links for each repository on the index page
+enable-index-links=1
+
+# Show owner on index page
+enable-index-owner=1
+
+# Show number of affected files per commit on the log pages
+enable-log-filecount=1
+
+# Show number of added/removed lines per commit on the log pages
+enable-log-linecount=1
+
+# use the subject of the parent commit as link text to parent commits
+enable-subject-links=1
+
+# Enable statistics per week, month and quarter
+max-stats=year
+
+#side-by-side-diffs=1
+
+# Specify some default clone urls using macro expansion
+clone-url=https://git.novatech-llc.com/$CGIT_REPO_URL
+
+# Set the title and heading of the repository index page
+root-title=NovaTech-LLC git repositories
+
+# Set a subheading for the repository index page
+root-desc=tracking NovaTech software development
+
+# Include some more info about example.com on the index page
+root-readme=/var/www/html/about.html
+
+##
+## List of common mimetypes
+##
+
+mimetype.gif=image/gif
+mimetype.html=text/html
+mimetype.jpg=image/jpeg
+mimetype.jpeg=image/jpeg
+mimetype.pdf=application/pdf
+mimetype.png=image/png
+mimetype.svg=image/svg+xml
+
+# use highlight as a source filter
+source-filter=/usr/lib/cgit/filters/syntax-highlighting.sh
+
+# Highlight source code with python pygments-based highlighter
+#source-filter=/var/www/cgit/filters/syntax-highlighting.py
+
+# Format markdown, restructuredtext, manpages, text files, and html files
+# through the right converters
+about-filter=/var/www/cgit/filters/about-formatting.sh
+
+##
+## Search for these files in the root of the default branch of repositories
+## for coming up with the about page:
+##
+readme=:README.md
+readme=:readme.md
+readme=:README.mkd
+readme=:readme.mkd
+readme=:README.rst
+readme=:readme.rst
+readme=:README.html
+readme=:readme.html
+readme=:README.htm
+readme=:readme.htm
+readme=:README.txt
+readme=:readme.txt
+readme=:README
+readme=:readme
+readme=:INSTALL.md
+readme=:install.md
+readme=:INSTALL.mkd
+readme=:install.mkd
+readme=:INSTALL.rst
+readme=:install.rst
+readme=:INSTALL.html
+readme=:install.html
+readme=:INSTALL.htm
+readme=:install.htm
+readme=:INSTALL.txt
+readme=:install.txt
+readme=:INSTALL
+readme=:install
+
 
 #
 # List of repositories.
@@ -25,10 +128,5 @@ robots=noindex, nofollow
  # repo.desc=This is my git repository
 #
 # or have cgit search for each repository
-scan-path=GIT_BASE_DIR
+scan-path=/var/lib/git
 
-# descriptions and owner information like in gitweb
-enable-git-config=1
-
-# use highlight as a source filter
-source-filter=/usr/lib/cgit/filters/syntax-highlighting.sh

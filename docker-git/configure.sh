@@ -13,11 +13,6 @@ sed -ie 's/^ErrorLog /#ErrorLog /' /etc/apache2/apache2.conf
 sed -ie 's/\$[{]APACHE_RUN_DIR[}]/\/var\/run\/apache2/' /etc/apache2/mods-available/ssl.conf
 sed -ie 's/\$[{]APACHE_RUN_DIR[}]/\/var\/run\/apache2/' /etc/apache2/mods-available/cgid.conf
 
-# Set the lock directory for dav_fs
-mkdir -p /var/lock/apache2
-chown www-data:www-data /var/lock/apache2
-sed -ie 's/\$[{]APACHE_LOCK_DIR[}]/\/var\/lock\/apache2/' /etc/apache2/mods-available/dav_fs.conf
-
 # create the cgit cache directory
 mkdir -p /var/cache/cgit
 chown www-data:www-data /var/cache/cgit
@@ -27,7 +22,7 @@ sed -ie 's/^exec highlight /#exec highlight /' /usr/lib/cgit/filters/syntax-high
 echo 'exec highlight --force --inline-css -f -I -O xhtml -S "$EXTENSION" 2>/dev/null' >> /usr/lib/cgit/filters/syntax-highlighting.sh
 
 # set the git base Directory in the config files
-sed -ie 's|GIT_BASE_DIR|'${GIT_BASE_DIR}'|' /etc/cgitrc /etc/gitweb.conf /etc/apache2/sites-available/*.conf
+sed -ie 's|GIT_BASE_DIR|'${GIT_BASE_DIR}'|' /etc/cgitrc /etc/apache2/sites-available/*.conf
 
 # place the hard coded environment variables
 echo "
@@ -47,18 +42,13 @@ echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
 a2enconf servername
 
 # enable modules
-a2enmod ssl
-a2enmod cgid
-a2enmod dav_fs
+a2enmod ssl cgi
 
 # disable a config - Needed so redirect logs to /proc/self/fd/2 will work (may need to redirect the log it is trying to set)
 a2disconf other-vhosts-access-log
 
 # Enable the site
-a2ensite 000-git-ssl
-#a2ensite 000-git
-a2ensite 001-cgit
-#a2ensite 001-gitweb
-
-# disable site
-a2dissite 000-default
+a2ensite 000-default
+a2ensite 000-default-ssl
+a2ensite 001-git
+a2ensite 002-cgit
