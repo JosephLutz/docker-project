@@ -3,7 +3,7 @@
 #
 # Version 0.0
 
-FROM debian:7
+FROM debian:8
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 # copy over files
