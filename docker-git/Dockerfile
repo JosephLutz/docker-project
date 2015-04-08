@@ -3,8 +3,7 @@
 #
 # Version 0.1
 
-#FROM ubuntu:14.04
-FROM debian:7
+FROM debian:8
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 ENV CGIT_VERSION 0.11.2

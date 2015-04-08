@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 
 GIT_BASE_DIR=/var/lib/git
@@ -45,20 +46,18 @@ rm -f \
   /etc/cgitrce
 
 # create apache domainname config
-echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
+echo "ServerName localhost" > /etc/apache2/config-available/servername.conf
+a2enconf servername.conf
 
-# disable a config - Needed so redirect logs to /proc/self/fd/2 will work (may need to redirect the log it is trying to set)
+# disable a config - wants to use an environment variable
 a2disconf other-vhosts-access-log
-
-# enable configs
-a2enconf servername
 
 # enable modules
 a2enmod ssl cgi
 
 # Enable the site
 a2ensite \
-  000-default-ssl \
-  000-default \
-  001-git \
-  002-cgit
+  000-default-ssl.conf \
+  000-default.conf \
+  001-git.conf \
+  002-cgit.conf
