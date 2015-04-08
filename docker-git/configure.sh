@@ -3,8 +3,16 @@ set -e
 
 GIT_BASE_DIR=/var/lib/git
 
+# comment out apache2 config file lines that refrence the environment variables
+sed -ie 's/^Mutex file/#Mutex file/' /etc/apache2/apache2.conf
+sed -ie 's/^PidFile /#PidFile /' /etc/apache2/apache2.conf
+sed -ie 's/^User /#User /' /etc/apache2/apache2.conf
+sed -ie 's/^Group /#Group /' /etc/apache2/apache2.conf
+sed -ie 's/^ErrorLog /#ErrorLog /' /etc/apache2/apache2.conf
+rm -f /etc/apache2/apache2.confe
+
 # place the hard coded environment variables
-cat << EOF > /etc/apache2/apache2.conf
+cat << EOF >> /etc/apache2/apache2.conf
 
 # hard code the environment variables
 Mutex file:/var/lock/apache2 default
@@ -14,14 +22,6 @@ Group www-data
 ErrorLog /proc/self/fd/2
 CustomLog /proc/self/fd/1 combined
 EOF
-
-# comment out apache2 config file lines that refrence the environment variables
-sed -ie 's/^Mutex file/#Mutex file/' /etc/apache2/apache2.conf
-sed -ie 's/^PidFile /#PidFile /' /etc/apache2/apache2.conf
-sed -ie 's/^User /#User /' /etc/apache2/apache2.conf
-sed -ie 's/^Group /#Group /' /etc/apache2/apache2.conf
-sed -ie 's/^ErrorLog /#ErrorLog /' /etc/apache2/apache2.conf
-rm -f /etc/apache2/apache2.confe
 
 # set the SSLSessionCache directory
 sed -ie 's/\$[{]APACHE_RUN_DIR[}]/\/var\/run\/apache2/' /etc/apache2/mods-available/ssl.conf
