@@ -46,7 +46,7 @@ rm -f \
   /etc/cgitrce
 
 # create apache domainname config
-echo "ServerName localhost" > /etc/apache2/config-available/servername.conf
+echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
 a2enconf servername.conf
 
 # disable a config - wants to use an environment variable
