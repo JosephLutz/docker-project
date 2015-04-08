@@ -3,7 +3,8 @@
 #
 # Version 0.1
 
-FROM ubuntu:14.04
+#FROM ubuntu:14.04
+FROM debian:7
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 ENV CGIT_VERSION 0.11.2
@@ -72,31 +73,33 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# copy over scripts
-COPY ./docker-entrypoint.sh \
-    ./configure.sh \
-        /
-
-# Set the configuration
+# copy over files
 COPY \
-    config/000-default.conf \
     config/000-default-ssl.conf \
+    config/000-default.conf \
     config/001-git.conf \
     config/002-cgit.conf \
         /etc/apache2/sites-available/
 COPY \
     config/cgitrc \
         /etc/
+COPY ./docker-entrypoint.sh \
+    ./configure.sh \
+        /
+
+# run the configuration script
 RUN ["/bin/bash", "/configure.sh"]
 
 # specify which network ports will be used
 EXPOSE 80 443
 
+# set any environment variables
 ENV IMPORT_EXPORT_PATH /tmp/import_export
 
+# specify the volumes directly related to this image
 VOLUME ["/var/lib/git"]
 
-# start apache running
+# start the entrypoint script
 WORKDIR /var/www/html
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["git"]

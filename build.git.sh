@@ -29,7 +29,7 @@ sudo docker build --rm=true --tag="data_git_data" ${CWD}/data_volumes/git/data_g
 # create the data volumes
 
 # A data volume to hold certificates and passwords
-sudo docker run --name data_volume_git_data    --entrypoint=echo data_git_data "other GIT data"
+sudo docker run --name data_volume_git_data --entrypoint=echo data_git_data "other GIT data"
 
 #     generate self signed certificate - "other GIT data"
 sudo docker run -ti --rm \

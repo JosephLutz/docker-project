@@ -1,12 +1,12 @@
 #
-# WebSVN Docker container
+# SVN Docker container
 #
 # Version 0.0
 
-FROM image_websvn:latest
+FROM image_svn:latest
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 # create the volumes that will be needed
-VOLUME ["/var/lib/svn"]
+VOLUME ["/etc/htpasswd/", "/etc/apache2/ssl"]
 
 CMD ["true"]

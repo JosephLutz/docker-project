@@ -1,5 +1,5 @@
 # Variables for WebSVN and SVN
-WEBSVN_IP=172.16.0.101
+SVN_IP=172.16.0.101
 HOST_SVN_BACKUP_DIR=$(pwd)/BACKUP/SVN/
 SVN_REPOS=("ddio" "novatech" "NCD_Release")
 
