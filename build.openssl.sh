@@ -14,6 +14,11 @@ CWD=$(pwd)
 source config.sh
 
 # ************************************************************
+# pull latest version of base image
+sudo docker pull debian:8
+#sudo docker pull ubuntu:14.04
+
+# ************************************************************
 # create docker images
 sudo docker build --rm=true --tag="data_openssl" ${CWD}/docker-openssl
 
@@ -24,4 +29,6 @@ sudo docker run -ti --name data_volume_openssl \
 
 # ************************************************************
 # generating self signed keys for containers on the linuxserver
-sudo docker run -ti --rm --volumes-from data_volume_openssl data_openssl generate
+sudo docker run -ti --rm \
+  --volumes-from data_volume_openssl \
+  data_openssl generate

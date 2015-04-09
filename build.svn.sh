@@ -14,6 +14,11 @@ CWD=$(pwd)
 source config.sh
 
 # ************************************************************
+# pull latest version of base image
+sudo docker pull debian:8
+#sudo docker pull ubuntu:14.04
+
+# ************************************************************
 # create docker images
 sudo docker build --rm=true --tag="image_svn" ${CWD}/docker-svn
 
@@ -27,7 +32,9 @@ sudo docker run -ti --name data_volume_svn_repo \
 
 # ************************************************************
 # Start SVN for running on the linuxserver
-sudo docker run -d --name svn -P -p ${SVN_IP}:443:443 -p ${SVN_IP}:80:80 \
+sudo docker run -d --name svn \
+  --restart=always \
+  -P -p ${SVN_IP}:443:443 -p ${SVN_IP}:80:80 \
   --volumes-from data_volume_htpasswd \
   --volumes-from data_volume_openssl \
   --volumes-from data_volume_svn_repo \
