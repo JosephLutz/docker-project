@@ -6,7 +6,7 @@
 FROM debian:8
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
-ENV OPENLDAP_VERSION 2.4.31
+ENV OPENLDAP_VERSION 2.4
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
