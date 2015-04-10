@@ -28,9 +28,9 @@ CWD=$(pwd)
 }
 
 { # variables for MediaWIKI
-  NAME_WIKI_CONTAINER="mediawiki"
-  NAME_WIKI_MYSQL_CONTAINER="mediawiki_mysql"
-  NAME_WIKI_MYSQL_DV="DV_mediawiki_mysql"
+  NAME_WIKI_CONTAINER="wiki"
+  NAME_WIKI_MYSQL_CONTAINER="mysql_wiki"
+  NAME_WIKI_MYSQL_DV="DV_mysql_wiki"
   MEDIAWIKI_IP=172.16.0.103
   HOST_MEDIAWIKI_BACKUP_DIR=${CWD}/BACKUP/WIKI
   MYSQL_PASSWORD=mediawiki-secret-pw
