@@ -2,6 +2,10 @@
 set -e
 
 DJANGO_BASE_DIR=/var/lib/django
+VIRTUALENV_BASE_DIR=/var/lib/python
+
+# enable the virtual environment
+source ${VIRTUALENV_BASE_DIR}/bin/activate
 
 # ************************************************************
 # Options passed to the docker container to run scripts

@@ -1,6 +1,7 @@
 set -e
 
 DJANGO_BASE_DIR=/var/lib/django
+VIRTUALENV_BASE_DIR=/var/lib/python
 
 # comment out apache2 config file lines that refrence the environment variables
 sed -ie 's/^Mutex file/#Mutex file/' /etc/apache2/apache2.conf
@@ -45,10 +46,15 @@ a2enconf servername.conf
 a2disconf other-vhosts-access-log
 
 # enable modules
-a2enmod ssl cgi
+a2enmod ssl wsgi
 
 # Enable the site
 a2ensite \
   000-default-ssl.conf \
   000-default.conf \
   000-django
+
+# setup python virtual environment
+virtualenv --python=/usr/bin/python2.7 --system-site-packages ${VIRTUALENV_BASE_DIR}
+source ${VIRTUALENV_BASE_DIR}/bin/activate
+pip install Django==${DJANGO_VERSION}
