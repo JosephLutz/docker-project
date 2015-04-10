@@ -6,7 +6,7 @@ set -e
 ulimit -n 8192
 
 case ${1} in
-    'openldap')
+    openldap)
         exec slapd -d 32768 -u openldap -g openldap
         ;;
 

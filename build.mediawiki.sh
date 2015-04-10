@@ -2,8 +2,6 @@
 
 set -e
 
-CWD=$(pwd)
-
 source config.sh
 
 # ************************************************************
@@ -16,29 +14,28 @@ sudo docker pull mysql:latest
 
 # ************************************************************
 # create the data volumes
-
-# Create mysql data volume
-sudo docker run -ti --name data_volume_mediawiki_mysql \
+#     Create mysql data volume
+sudo docker run -ti --name "${NAME_WIKI_MYSQL_DV}" \
   mysql:latest echo "MySQL data store"
 
 # ************************************************************
 # start mysql and populate the datavolume
-sudo docker run -d --name mediawiki_mysql \
+sudo docker run -d --name "${NAME_WIKI_MYSQL_CONTAINER}" \
   --restart=always \
-  -e MYSQL_ROOT_PASSWORD=mediawiki-secret-pw \
-  -e MYSQL_USER=novatech \
-  -e MYSQL_PASSWORD=novatech \
+  -e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
   -e MYSQL_DATABASE=mediawiki \
-  --volumes-from data_volume_mediawiki_mysql \
+  -e MYSQL_USER="${MEDIAWIKI_USER}" \
+  -e MYSQL_PASSWORD="${MEDIAWIKI_PASSWORD}" \
+  --volumes-from "${NAME_WIKI_MYSQL_DV}" \
   mysql:latest
 
 # ************************************************************
 # start mysql and populate the datavolume
-sudo docker run -d --name mediawiki \
+sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
   --restart=always \
   -P -p ${MEDIAWIKI_IP}:443:443 -p ${MEDIAWIKI_IP}:80:80 \
   -e MEDIAWIKI_DB_NAME=mediawiki \
-  -e MEDIAWIKI_DB_USER=novatech \
-  -e MEDIAWIKI_DB_PASSWORD=novatech \
-  --link mediawiki_mysql:mysql \
+  -e MEDIAWIKI_DB_USER="${MEDIAWIKI_USER}" \
+  -e MEDIAWIKI_DB_PASSWORD="${MEDIAWIKI_PASSWORD}" \
+  --link ${NAME_WIKI_MYSQL_CONTAINER}:mysql \
   synctree/mediawiki:latest

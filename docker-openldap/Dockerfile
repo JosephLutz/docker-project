@@ -16,39 +16,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-        autoconf \
-        build-essential \
-        ca-certificates \
-        curl \
-    && \
-    cd /tmp/ && \
-    curl http://git.zx2c4.com/cgit/snapshot/cgit-${CGIT_VERSION}.tar.xz | tar xJ && \
-    cd /tmp/cgit-${CGIT_VERSION}/ && \
-    make get-git && \
-    make CGIT_SCRIPT_PATH=/usr/share/cgit prefix=/usr all  && \
-    make CGIT_SCRIPT_PATH=/usr/share/cgit prefix=/usr install && \
-    curl http://git-scm.com/favicon.ico > /usr/share/cgit/favicon.ico && \
-    mv "/usr/share/cgit/cgit.cgi" "/usr/lib/cgit" && \
-    ln -sf ../../lib/cgit/cgit.cgi "/usr/share/cgit/cgit.cgi" && \
-    cd /tmp/cgit-${CGIT_VERSION}/git/ && \
-    make configure && \
-    ./configure --prefix=/usr --without-tcltk --with-expat --with-curl --with-openssl && \
-    make && \
-    make install && \
-    cd && \
-    rm -rf /tmp/cgit-${CGIT_VERSION}/ && \
-    DEBIAN_FRONTEND=noninteractive apt-get purge --yes \
-        ca-certificates \
-        curl \
-        autoconf \
-        build-essential \
-    && \
-    DEBIAN_FRONTEND=noninteractive apt-get autoremove --yes && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 # copy over files
 COPY \
     config/modules/ \

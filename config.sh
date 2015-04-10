@@ -1,21 +1,53 @@
-# Variables for WebSVN and SVN
-SVN_IP=172.16.0.101
-HOST_SVN_BACKUP_DIR=$(pwd)/BACKUP/SVN/
-SVN_REPOS=("ddio" "novatech" "NCD_Release")
+{ # variables for OpenSSL
+  NAME_OPENSSL_IMAGE="data_openssl"
+  NAME_OPENSSL_DV="DV_openssl"
+}
 
-# variables for GIT
-GIT_IP=172.16.0.102
-HOST_GIT_BACKUP_DIR=$(pwd)/BACKUP/GIT/
+{ # variables for htpasswd
+  NAME_HTPASSWD_IMAGE="data_htpasswd"
+  NAME_HTPASSWD_DV="DV_htpasswd"
+}
 
-# variables for MediaWIKI
-MEDIAWIKI_IP=172.16.0.104
-HOST_MEDIAWIKI_BACKUP_DIR=$(pwd)/BACKUP/WIKI/
+{ # Variables for WebSVN and SVN
+  NAME_SVN_IMAGE="image_svn"
+  NAME_SVN_CONTAINER="svn"
+  NAME_SVN_REPO_DV="DV_svn_repo"
+  SVN_IP=172.16.0.101
+  HOST_SVN_BACKUP_DIR=./BACKUP/SVN
+  SVN_REPOS=("ddio" "novatech" "NCD_Release")
+}
 
-# variables for OpenLDAP
-OPENLDAP_IP=172.16.0.105
-HOST_OPENLDAP_BACKUP_DIR=$(pwd)/BACKUP/LDAP/
+{ # variables for GIT
+  NAME_GIT_IMAGE="image_git"
+  NAME_GIT_CONTAINER="git"
+  NAME_GIT_REPO_DV="DV_git_repo"
+  GIT_IP=172.16.0.102
+  HOST_GIT_BACKUP_DIR=./BACKUP/GIT
+}
 
+{ # variables for MediaWIKI
+  NAME_WIKI_CONTAINER="mediawiki"
+  NAME_WIKI_MYSQL_CONTAINER="mediawiki_mysql"
+  NAME_WIKI_MYSQL_DV="DV_mediawiki_mysql"
+  MEDIAWIKI_IP=172.16.0.103
+  HOST_MEDIAWIKI_BACKUP_DIR=./BACKUP/WIKI
+  MYSQL_PASSWORD=mediawiki-secret-pw
+  MEDIAWIKI_USER=novatech
+  MEDIAWIKI_PASSWORD=novatech
+}
 
-#DJANGO_IP=172.16.0.104
-#HOST_DJANGO_DIR=$(pwd)/code
-#HOST_WEBSVN_PASSWD_DIR=$(pwd)/data/websvn_password
+{ # variables for OpenLDAP
+  NAME_LDAP_IMAGE="image_openldap"
+  NAME_LDAP_CONTAINER="OpenLDAP"
+  NAME_LDAP_DV="DV_openldap"
+  OPENLDAP_IP=172.16.0.104
+  HOST_OPENLDAP_BACKUP_DIR=./BACKUP/LDAP
+}
+
+{ # variables for Django
+  NAME_DJANGO_IMAGE="image_django"
+  #NAME_DJANGO_CONTAINER="django"
+  DJANGO_IP=172.16.0.105
+  HOST_DJANGO_BACKUP_DIR=./BACKUP/DJANGO
+  HOST_DJANGO_SRC_DIR=./BACKUP/DJANGO/code
+}

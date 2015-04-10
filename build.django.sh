@@ -1,43 +1,23 @@
 #!/bin/bash
 set -e
 
-CWD=$(pwd)
-
 source config.sh
 
 # ************************************************************
-# make certain the host directories exist
-mkdir -p ${HOST_DJANGO_DIR}
+# pull latest version of base image
+sudo docker pull debian:8
 
 # ************************************************************
 # create docker images
-sudo docker build --rm=true --tag="django_image" ${CWD}/Django
+sudo docker build --rm=true --tag="${NAME_DJANGO_IMAGE}" ./docker-django
 
 # ************************************************************
 # create the data volumes
-#sudo docker run --name name_data_volume name_data
 
 # ************************************************************
-# populate the data volumes with their data
-
-# generate self signed certificate
-#${CWD}/websvn_CertificateSigningRequest.sh gen_self_signed
-
-# create the first user for access to WebSVN
-#sudo docker run -ti --rm \
-#  -v ${HOST_WEBSVN_PASSWD_DIR}:/etc/apache2/websvn_password \
-#  websvn_image \
-#    /bin/bash -c \
-#      "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes apache2-utils && \
-#      /usr/bin/htpasswd -bcB /etc/apache2/websvn_password/dav_svn.passwd novatech novatech"
-
-# Import SVN repositories
-#${CWD}/import_name.sh
-
-# ************************************************************
-# Start WebSVN for running on the linuxserver
-#${CWD}/start_websvn.sh
-exit 0
-sudo docker run -ti --rm -P -p ${DJANGO_IP}:443:443 -p ${DJANGO_IP}:80:80 \
-  -v ${HOST_DJANGO_DIR}:/var/lib/django \
-  django_image /bin/bash
+# Start Django running
+sudo docker run -ti --rm \
+  -P -p ${DJANGO_IP}:443:443 -p ${DJANGO_IP}:80:80 \
+  -v ${HOST_DJANGO_SRC_DIR}:/var/lib/django \
+  -v ${HOST_DJANGO_BACKUP_DIR}:/tmp/import_export \
+  ${NAME_DJANGO_IMAGE}:latest /bin/bash
