@@ -1,6 +1,6 @@
 BACKUP_DIR=$(pwd)/BACKUP
 
-TAG=current
+TAG="current"
 { # variables for OpenSSL
   NAME_OPENSSL_IMAGE="novatechweb/data_openssl"
   NAME_OPENSSL_DV="DV_openssl"
@@ -15,7 +15,7 @@ TAG=current
   NAME_SVN_IMAGE="novatechweb/svn"
   NAME_SVN_CONTAINER="svn"
   NAME_SVN_REPO_DV="DV_svn_repo"
-  SVN_IP=172.16.71.111
+  SVN_IP=172.16.0.101
   HOST_SVN_BACKUP_DIR=${BACKUP_DIR}/SVN
   SVN_REPOS=("ddio" "novatech" "NCD_Release")
 }
@@ -24,7 +24,7 @@ TAG=current
   NAME_GIT_IMAGE="novatechweb/git"
   NAME_GIT_CONTAINER="git"
   NAME_GIT_REPO_DV="DV_git_repo"
-  GIT_IP=172.16.71.112
+  GIT_IP=172.16.0.102
   HOST_GIT_BACKUP_DIR=${BACKUP_DIR}/GIT
 }
 
@@ -32,7 +32,7 @@ TAG=current
   NAME_WIKI_CONTAINER="wiki"
   NAME_WIKI_MYSQL_CONTAINER="mysql_wiki"
   NAME_WIKI_MYSQL_DV="DV_mysql_wiki"
-  MEDIAWIKI_IP=172.16.71.113
+  MEDIAWIKI_IP=172.16.0.103
   HOST_MEDIAWIKI_BACKUP_DIR=${BACKUP_DIR}/WIKI
   MYSQL_PASSWORD=mediawiki-secret-pw
   MEDIAWIKI_USER=novatech
@@ -43,14 +43,14 @@ TAG=current
   NAME_LDAP_IMAGE="novatechweb/ldap"
   NAME_LDAP_CONTAINER="OpenLDAP"
   NAME_LDAP_DV="DV_ldap"
-  OPENLDAP_IP=172.16.71.114
+  OPENLDAP_IP=172.16.0.104
   HOST_OPENLDAP_BACKUP_DIR=${BACKUP_DIR}/LDAP
 }
 
 { # variables for Django
   NAME_DJANGO_IMAGE="novatechweb/django"
   #NAME_DJANGO_CONTAINER="django"
-  DJANGO_IP=172.16.71.115
+  DJANGO_IP=172.16.0.105
   HOST_DJANGO_BACKUP_DIR=${BACKUP_DIR}/Django
   HOST_DJANGO_SRC_DIR=${BACKUP_DIR}/Django/code
 }
