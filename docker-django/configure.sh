@@ -58,6 +58,3 @@ a2ensite \
 virtualenv --python=/usr/bin/python2.7 --system-site-packages ${VIRTUALENV_BASE_DIR}
 source ${VIRTUALENV_BASE_DIR}/bin/activate
 pip install Django==${DJANGO_VERSION}
-
-
-chown -R www-data:www-data ${DJANGO_BASE_DIR}
