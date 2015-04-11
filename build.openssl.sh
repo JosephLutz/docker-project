@@ -22,7 +22,7 @@ sudo docker build --rm=true --tag="${NAME_OPENSSL_IMAGE}" ./docker-openssl
 sudo docker inspect ${NAME_OPENSSL_IMAGE}:latest > /dev/null
 # move the image to the tag
 sudo docker tag ${NAME_OPENSSL_IMAGE}:latest ${NAME_OPENSSL_IMAGE}:${TAG}
-sudo docker rm ${NAME_OPENSSL_IMAGE}:latest
+sudo docker rmi ${NAME_OPENSSL_IMAGE}:latest
 
 # ************************************************************
 # create the data volumes:

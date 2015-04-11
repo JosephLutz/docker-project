@@ -25,7 +25,7 @@ sudo docker build --rm=true --tag="${NAME_GIT_IMAGE}" ./docker-git
 sudo docker inspect ${NAME_GIT_IMAGE}:latest &> /dev/null
 # move the image to the tag
 sudo docker tag ${NAME_GIT_IMAGE}:latest ${NAME_GIT_IMAGE}:${TAG}
-sudo docker rm ${NAME_GIT_IMAGE}:latest
+sudo docker rmi ${NAME_GIT_IMAGE}:latest
 
 # ************************************************************
 # create the data volumes

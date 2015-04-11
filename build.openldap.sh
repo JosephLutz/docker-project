@@ -24,7 +24,7 @@ sudo docker build --rm=true --tag="${NAME_LDAP_IMAGE}" ./docker-openldap
 sudo docker inspect ${NAME_LDAP_IMAGE}:latest > /dev/null
 # move the image to the tag
 sudo docker tag ${NAME_LDAP_IMAGE}:latest ${NAME_LDAP_IMAGE}:${TAG}
-sudo docker rm ${NAME_LDAP_IMAGE}:latest
+sudo docker rmi ${NAME_LDAP_IMAGE}:latest
 
 # ************************************************************
 # create the data volumes:

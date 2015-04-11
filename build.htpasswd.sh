@@ -22,7 +22,7 @@ sudo docker build --rm=true --tag="${NAME_HTPASSWD_IMAGE}" ./docker-htpasswd
 sudo docker inspect ${NAME_HTPASSWD_IMAGE}:latest > /dev/null
 # move the image to the tag
 sudo docker tag ${NAME_HTPASSWD_IMAGE}:latest ${NAME_HTPASSWD_IMAGE}:${TAG}
-sudo docker rm ${NAME_HTPASSWD_IMAGE}:latest
+sudo docker rmi ${NAME_HTPASSWD_IMAGE}:latest
 
 # ************************************************************
 # create the data volumes:

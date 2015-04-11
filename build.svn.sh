@@ -25,7 +25,7 @@ sudo docker build --rm=true --tag="${NAME_SVN_IMAGE}" ./docker-svn
 sudo docker inspect ${NAME_SVN_IMAGE}:latest &> /dev/null
 # move the image to the tag
 sudo docker tag ${NAME_SVN_IMAGE}:latest ${NAME_SVN_IMAGE}:${TAG}
-sudo docker rm ${NAME_SVN_IMAGE}:latest
+sudo docker rmi ${NAME_SVN_IMAGE}:latest
 
 # ************************************************************
 # create the data volumes

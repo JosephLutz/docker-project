@@ -49,7 +49,7 @@ TAG="current"
 
 { # variables for Django
   NAME_DJANGO_IMAGE="novatechweb/django"
-  #NAME_DJANGO_CONTAINER="django"
+  NAME_DJANGO_CONTAINER="django"
   DJANGO_IP=172.16.0.105
   HOST_DJANGO_BACKUP_DIR=${BACKUP_DIR}/Django
   HOST_DJANGO_SRC_DIR=${BACKUP_DIR}/Django/code
