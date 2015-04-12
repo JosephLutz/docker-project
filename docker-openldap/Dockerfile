@@ -17,37 +17,30 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # copy over files
-COPY \
-    config/modules/ \
-    /etc/ldap.dist/modules
-COPY ./docker-entrypoint.sh \
-    ./configure.sh \
-        /
+COPY ./docker-entrypoint.sh /
 
-# run the configuration script
-RUN ["/bin/bash", "/configure.sh", \
-    "openldap-admin-secret-pw", \
-    "openldap-config-secret-pw", \
-    "ldap.example.org", \
-    "Example Inc.", \
-    "collective,corba,duaconf,dyngroup,java,misc,openldap,pmi,ppolicy", \
-    "memberof"]
+# backup distribution ldap config
+RUN \
+  cd /etc && \
+  tar -cavf /etc/ldap.tar.gz ldap && \
+  rm -rf /etc/ldap /var/lib/ldap
+
+# setup the volumes that hold the configuration
+#VOLUME [ \
+#  "/etc/ldap/slapd.d/", \
+#  "/etc/ldap/sasl2/", \
+#  "/etc/ldap/schema/", \
+#  "/etc/ldap/modules/", \
+#  "/var/lib/ldap" \
+#  ]
 
 # specify which network ports will be used
-EXPOSE 389
-
-# set any environment variables
-#ENV SLAPD_PASSWORD openldap-admin-secret-pw
-#ENV SLAPD_CONFIG_PASSWORD openldap-config-secret-pw
-#ENV SLAPD_DOMAIN ldap.example.org
-#ENV SLAPD_ORGANIZATION Example Inc.
-#ENV SLAPD_ADDITIONAL_SCHEMAS collective, corba, duaconf, dyngroup, java, misc, openldap, pmi, ppolicy
-#ENV SLAPD_ADDITIONAL_MODULES memberof
+EXPOSE 389 636
 
 # specify the volumes directly related to this image
-VOLUME ["/var/lib/ldap"]
+VOLUME ["/etc/ldap", "/var/lib/ldap"]
 
 # start the entrypoint script
-WORKDIR /var/www/html
+WORKDIR /var/lib/ldap
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["openldap"]
