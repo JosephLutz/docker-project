@@ -4,6 +4,3 @@
 [submodule "docker-openldap.dinkel"]
 	path = docker-openldap.dinkel
 	url = https://github.com/dinkel/docker-openldap.git
-[submodule "BACKUP/Django/code/src/django-project"]
-	path = BACKUP/Django/code/src/django-project
-	url = https://github.com/JosephLutz/tango_project.git
