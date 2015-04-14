@@ -5,6 +5,16 @@ set -e
 
 # ************************************************************
 # verify prerequisites:
+sudo docker inspect ${NAME_WIKI_MYSQL_CONTAINER} &> /dev/null && {
+    # The container we are trying to create already exists
+    echo "Container already exists : ${NAME_WIKI_MYSQL_CONTAINER}"
+    exit 1
+}
+sudo docker inspect ${NAME_WIKI_CONTAINER} &> /dev/null && {
+    # The container we are trying to create already exists
+    echo "Container already exists : ${NAME_WIKI_CONTAINER}"
+    exit 1
+}
 #   pull latest version of base image
 sudo docker pull synctree/mediawiki
 sudo docker inspect synctree/mediawiki > /dev/null

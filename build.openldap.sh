@@ -12,6 +12,11 @@ set -e
 
 # ************************************************************
 # verify prerequisites:
+sudo docker inspect ${NAME_LDAP_CONTAINER} $> /dev/null && {
+    # The container we are trying to create already exists
+    echo "Container already exists : ${NAME_LDAP_CONTAINER}"
+    exit 1
+}
 sudo docker inspect ${NAME_OPENSSL_DV} &> /dev/null || \
     ./build.openssl.sh
 #     pull latest version of base image
@@ -20,6 +25,12 @@ sudo docker inspect debian:8 > /dev/null
 
 # ************************************************************
 # create docker images:
+sudo docker inspect ${NAME_LDAP_IMAGE} &> /dev/null && {
+	# an image already exists with the name and tag we are trying to create.
+	# move it to the latest tag so it will be updated and then renamed
+	sudo docker tag ${NAME_LDAP_IMAGE}:${TAG} ${NAME_LDAP_IMAGE}:latest
+	sudo docker rmi ${NAME_LDAP_IMAGE}:${TAG}
+}
 sudo docker build --rm=true --tag="${NAME_LDAP_IMAGE}" ./docker-openldap
 sudo docker inspect ${NAME_LDAP_IMAGE}:latest > /dev/null
 # move the image to the tag
@@ -42,7 +53,7 @@ sudo docker inspect ${NAME_LDAP_DV} &> /dev/null || \
 #  --volumes-from "${NAME_LDAP_DV}" \
 #  ${NAME_LDAP_IMAGE}:${TAG}
 
-sudo docker run -ti --rm \
+sudo docker run -ti --rm --name "${NAME_LDAP_CONTAINER}" \
   -P -p ${OPENLDAP}:389 -p ${OPENLDAP_SECURE}:636 \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --volumes-from "${NAME_LDAP_DV}" \
