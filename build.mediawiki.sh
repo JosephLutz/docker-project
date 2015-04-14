@@ -38,7 +38,7 @@ sudo docker run -d --name "${NAME_WIKI_MYSQL_CONTAINER}" \
 sudo docker inspect ${NAME_WIKI_MYSQL_CONTAINER} > /dev/null
 sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
   --restart=always \
-  -P -p ${MEDIAWIKI_IP}:443:443 -p ${MEDIAWIKI_IP}:80:80 \
+  -P -p ${MEDIAWIKI}:443 -p ${MEDIAWIKI_OPEN}:80 \
   -e MEDIAWIKI_DB_NAME=mediawiki \
   -e MEDIAWIKI_DB_USER="${MEDIAWIKI_USER}" \
   -e MEDIAWIKI_DB_PASSWORD="${MEDIAWIKI_PASSWORD}" \

@@ -58,3 +58,5 @@ a2ensite \
 virtualenv --python=/usr/bin/python2.7 --system-site-packages ${VIRTUALENV_BASE_DIR}
 source ${VIRTUALENV_BASE_DIR}/bin/activate
 pip install Django==${DJANGO_VERSION}
+#pip install python-ldap==${PYTHON_LDAP_VERSION}    # do not have tools and libraries to compile C source => installed older distribution version
+pip install django-ldapdb==${DJANGO_LDAPDB_VERSION}

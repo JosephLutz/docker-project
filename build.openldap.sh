@@ -38,13 +38,12 @@ sudo docker inspect ${NAME_LDAP_DV} &> /dev/null || \
 # Start openldap for running on the linuxserver
 #sudo docker run -d --name "${NAME_LDAP_CONTAINER}" \
 #  --restart=always \
-#  -P -p ${OPENLDAP_IP}:389:389 -p ${OPENLDAP_IP}:636:636 \
 #  --volumes-from "${NAME_OPENSSL_DV}" \
 #  --volumes-from "${NAME_LDAP_DV}" \
 #  ${NAME_LDAP_IMAGE}:${TAG}
 
-docker run -ti --rm \
-  -P -p ${OPENLDAP_IP}:389:389 -p ${OPENLDAP_IP}:636:636 \
+sudo docker run -ti --rm \
+  -P -p ${OPENLDAP}:389 -p ${OPENLDAP_SECURE}:636 \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --volumes-from "${NAME_LDAP_DV}" \
   ${NAME_LDAP_IMAGE}:${TAG} /bin/bash

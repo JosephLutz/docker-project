@@ -6,18 +6,22 @@
 FROM debian:8
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
-ENV DJANGO_VERSION 1.8
+ENV APACHE_MOD_WSGI 4.3
+ENV PYTHON_LDAP_VERSION 2.4
 
 # install the required packages and cleanup the install
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
         apache2 \
-        libapache2-mod-wsgi \
-        virtualenv \
+        libapache2-mod-wsgi=${APACHE_MOD_WSGI}* \
         python2.7 \
+        python-ldap=${PYTHON_LDAP_VERSION}* \
+        virtualenv \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+# potential other packages to install
+#        build-essential \
 
 # copy over files
 COPY \
@@ -25,6 +29,9 @@ COPY \
     config/000-default.conf \
     config/000-django.conf \
         /etc/apache2/sites-available/
+
+ENV DJANGO_VERSION 1.8
+ENV DJANGO_LDAPDB_VERSION 0.3.2
 COPY ./docker-entrypoint.sh \
     ./configure.sh \
         /

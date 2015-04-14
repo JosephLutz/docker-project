@@ -6,7 +6,7 @@ VIRTUALENV_BASE_DIR=/var/lib/python
 
 # enable the virtual environment
 source ${VIRTUALENV_BASE_DIR}/bin/activate
-chown -R www-data:www-data ${DJANGO_BASE_DIR}
+chown www-data:www-data ${DJANGO_BASE_DIR}/src/django-project/ ${DJANGO_BASE_DIR}/src/django-project/db.sqlite3
 
 # ************************************************************
 # Options passed to the docker container to run scripts

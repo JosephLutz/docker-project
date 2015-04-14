@@ -45,7 +45,7 @@ sudo docker run -ti --rm \
 # Start SVN for running on the linuxserver
 sudo docker run -d --name "${NAME_SVN_CONTAINER}" \
   --restart=always \
-  -P -p ${SVN_IP}:443:443 -p ${SVN_IP}:80:80 \
+  -P -p ${SVN}:443 -p ${SVN_OPEN}:80 \
   --volumes-from "${NAME_SVN_REPO_DV}" \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --volumes-from "${NAME_HTPASSWD_DV}" \

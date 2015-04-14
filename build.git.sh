@@ -45,7 +45,7 @@ sudo docker run -ti --rm \
 # Start git for running on the linuxserver
 sudo docker run -d --name "${NAME_GIT_CONTAINER}" \
   --restart=always \
-  -P -p ${GIT_IP}:443:443 -p ${GIT_IP}:80:80 \
+  -P -p ${GIT}:443 -p ${GIT_OPEN}:80 \
   --volumes-from "${NAME_GIT_REPO_DV}" \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --volumes-from "${NAME_HTPASSWD_DV}" \
