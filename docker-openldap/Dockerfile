@@ -16,23 +16,15 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# copy over files
-COPY ./docker-entrypoint.sh /
-
-# backup distribution ldap config
+# backup distribution ldap config and delete the config
 RUN \
   cd /etc && \
   tar -cavf /etc/ldap.tar.gz ldap && \
   rm -rf /etc/ldap /var/lib/ldap
 
-# setup the volumes that hold the configuration
-#VOLUME [ \
-#  "/etc/ldap/slapd.d/", \
-#  "/etc/ldap/sasl2/", \
-#  "/etc/ldap/schema/", \
-#  "/etc/ldap/modules/", \
-#  "/var/lib/ldap" \
-#  ]
+# copy over files
+COPY ./docker-entrypoint.sh /
+COPY ./config/config.ldif /etc/
 
 # specify which network ports will be used
 EXPOSE 389 636
