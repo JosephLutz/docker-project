@@ -4,3 +4,6 @@
 [submodule "docker-openldap.dinkel"]
 	path = docker-openldap.dinkel
 	url = https://github.com/dinkel/docker-openldap.git
+[submodule "docker-phpmyadmin"]
+	path = docker-phpmyadmin
+	url = https://github.com/corbinu/docker-phpmyadmin.git

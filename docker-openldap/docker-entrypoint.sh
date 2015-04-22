@@ -21,7 +21,7 @@ case ${1} in
         mkdir -p ${CONFIG_PATH}
         cd /etc
         tar -xavf /etc/ldap.tar.gz ldap/schema/
-        nice ${SLAPADD} -F ${CONFIG_PATH} -l /etc/config.ldif
+        nice ${SLAPADD} -F ${CONFIG_PATH} -n 0 -l /etc/config.ldif
         chown -R openldap.openldap ${DB_PATH} ${CONFIG_PATH}
         ;;
 

@@ -52,10 +52,10 @@ sudo docker inspect ${NAME_LDAP_DV} &> /dev/null || \
       ${NAME_LDAP_IMAGE}:${TAG} init_data_volumes
 
 # setup data volumes
-  #sudo docker run -ti --rm \
-  #  --volumes-from "${NAME_LDAP_DV}" \
-  #  -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
-  #  ${NAME_LDAP_IMAGE}:${TAG} apply_ldif database.ldif
+  # sudo docker run -ti --rm \
+  #   --volumes-from "${NAME_LDAP_DV}" \
+  #   -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
+  #   ${NAME_LDAP_IMAGE}:${TAG} apply_ldif database.ldif
 sudo docker run -ti --rm \
   --volumes-from "${NAME_LDAP_DV}" \
   -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
