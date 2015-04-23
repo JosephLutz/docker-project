@@ -21,23 +21,37 @@ sudo docker inspect ${NAME_WIKI_PHPMYADMIN_CONTAINER} &> /dev/null && {
     exit 1
 }
 #   pull latest version of base image
-###   sudo docker pull synctree/mediawiki
-###   sudo docker inspect synctree/mediawiki > /dev/null
-###   sudo docker pull mysql:latest
-###   sudo docker inspect mysql:latest > /dev/null
-###   #sudo docker pull corbinu/docker-phpmyadmin:latest
-###   #sudo docker inspect corbinu/docker-phpmyadmin:latest > /dev/null
+sudo docker inspect ${NAME_OPENSSL_DV} &> /dev/null || \
+    ./build.openssl.sh
+sudo docker pull synctree/mediawiki
+sudo docker inspect synctree/mediawiki > /dev/null
+sudo docker pull mysql:latest
+sudo docker inspect mysql:latest > /dev/null
+#sudo docker pull corbinu/docker-phpmyadmin:latest
+#sudo docker inspect corbinu/docker-phpmyadmin:latest > /dev/null
 
+# ************************************************************
 # remove any old versions of the tags
-sudo docker inspect synctree/mediawiki:${TAG} &> /dev/null && \
-    sudo docker rmi synctree/mediawiki:${TAG}
 sudo docker inspect mysql:${TAG} &> /dev/null && \
     sudo docker rmi mysql:${TAG}
 #sudo docker inspect corbinu/docker-phpmyadmin:${TAG} &> /dev/null && \
 #    sudo docker rmi corbinu/docker-phpmyadmin:${TAG}
 
+# ************************************************************
+# create docker images:
+sudo docker inspect ${NAME_WIKI_IMAGE}:${TAG} &> /dev/null && {
+  # an image already exists with the name and tag we are trying to create.
+  # move it to the latest tag so it will be updated and then renamed
+  sudo docker tag ${NAME_WIKI_IMAGE}:${TAG} ${NAME_WIKI_IMAGE}:latest
+  sudo docker rmi ${NAME_WIKI_IMAGE}:${TAG}
+}
+sudo docker build --rm=true --tag="${NAME_WIKI_IMAGE}" ./docker-mediawiki
+sudo docker inspect ${NAME_WIKI_IMAGE}:latest > /dev/null
+# move the image to the tag
+sudo docker tag ${NAME_WIKI_IMAGE}:latest ${NAME_WIKI_IMAGE}:${TAG}
+sudo docker rmi ${NAME_WIKI_IMAGE}:latest
+
 # create tag for images
-sudo docker tag synctree/mediawiki:latest synctree/mediawiki:${TAG}
 sudo docker tag mysql:latest mysql:${TAG}
 #sudo docker tag corbinu/docker-phpmyadmin:latest corbinu/docker-phpmyadmin:${TAG}
 
@@ -47,9 +61,14 @@ sudo docker tag mysql:latest mysql:${TAG}
 sudo docker inspect ${NAME_WIKI_MYSQL_DV} &> /dev/null || \
     sudo docker run -ti --name "${NAME_WIKI_MYSQL_DV}" \
       mysql:${TAG} echo "MySQL data store"
+#     create data volume containing static data for the mediawiki
+sudo docker inspect ${NAME_WIKI_DV} &> /dev/null || \
+    sudo docker run -ti --name "${NAME_WIKI_DV}" \
+      --entrypoint="/bin/echo" \
+      ${NAME_WIKI_IMAGE}:${TAG} "mediawiki data store"
 
 # ************************************************************
-# start mysql and populate the datavolume
+# start mysql
 sudo docker run -d --name "${NAME_WIKI_MYSQL_CONTAINER}" \
   --restart=always \
   -e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
@@ -60,7 +79,7 @@ sudo docker run -d --name "${NAME_WIKI_MYSQL_CONTAINER}" \
   mysql:${TAG}
 
 # ************************************************************
-# start mediawiki and populate the datavolume
+# start mediawiki
 sudo docker inspect ${NAME_WIKI_MYSQL_CONTAINER} > /dev/null
 sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
   --restart=always \
@@ -68,13 +87,17 @@ sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
   -e MEDIAWIKI_DB_NAME=wikidb \
   -e MEDIAWIKI_DB_USER="${MEDIAWIKI_USER}" \
   -e MEDIAWIKI_DB_PASSWORD="${MEDIAWIKI_PASSWORD}" \
+  --volumes-from "${NAME_WIKI_DV}" \
+  --volumes-from "${NAME_OPENSSL_DV}" \
   --link ${NAME_WIKI_MYSQL_CONTAINER}:mysql \
-  -v ${BACKUP_DIR}:/tmp/import_export \
-  synctree/mediawiki:${TAG}
-
+  ${NAME_WIKI_IMAGE}:${TAG}
 
 # ************************************************************
-# build phpmyadmin with changes made. then make tag
+# restore mediawiki settings
+./mediawiki.sh restore
+
+# ************************************************************
+# build phpmyadmin with custom changes and tag image
 sudo docker build --rm=true --tag="docker-phpmyadmin" ./docker-phpmyadmin
 sudo docker inspect docker-phpmyadmin:latest > /dev/null
 sudo docker inspect docker-phpmyadmin:${TAG} &> /dev/null && \
