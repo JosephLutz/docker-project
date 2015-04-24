@@ -27,15 +27,15 @@ sudo docker pull synctree/mediawiki
 sudo docker inspect synctree/mediawiki > /dev/null
 sudo docker pull mysql:latest
 sudo docker inspect mysql:latest > /dev/null
-#sudo docker pull corbinu/docker-phpmyadmin:latest
-#sudo docker inspect corbinu/docker-phpmyadmin:latest > /dev/null
+sudo docker pull corbinu/docker-phpmyadmin:latest
+sudo docker inspect corbinu/docker-phpmyadmin:latest > /dev/null
 
 # ************************************************************
 # remove any old versions of the tags
 sudo docker inspect mysql:${TAG} &> /dev/null && \
     sudo docker rmi mysql:${TAG}
-#sudo docker inspect corbinu/docker-phpmyadmin:${TAG} &> /dev/null && \
-#    sudo docker rmi corbinu/docker-phpmyadmin:${TAG}
+sudo docker inspect corbinu/docker-phpmyadmin:${TAG} &> /dev/null && \
+    sudo docker rmi corbinu/docker-phpmyadmin:${TAG}
 
 # ************************************************************
 # create docker images:
@@ -53,7 +53,7 @@ sudo docker rmi ${NAME_WIKI_IMAGE}:latest
 
 # create tag for images
 sudo docker tag mysql:latest mysql:${TAG}
-#sudo docker tag corbinu/docker-phpmyadmin:latest corbinu/docker-phpmyadmin:${TAG}
+sudo docker tag corbinu/docker-phpmyadmin:latest corbinu/docker-phpmyadmin:${TAG}
 
 # ************************************************************
 # create the data volumes:
@@ -96,13 +96,13 @@ sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
 # restore mediawiki settings
 ./mediawiki.sh restore
 
-# ************************************************************
-# build phpmyadmin with custom changes and tag image
-sudo docker build --rm=true --tag="docker-phpmyadmin" ./docker-phpmyadmin
-sudo docker inspect docker-phpmyadmin:latest > /dev/null
-sudo docker inspect docker-phpmyadmin:${TAG} &> /dev/null && \
-    sudo docker rmi docker-phpmyadmin:${TAG}
-sudo docker tag docker-phpmyadmin:latest docker-phpmyadmin:${TAG}
+ ### # ************************************************************
+ ### # build phpmyadmin with custom changes and tag image
+ ### sudo docker build --rm=true --tag="novatechweb/phpmyadmin" ./docker-phpmyadmin
+ ### sudo docker inspect novatechweb/phpmyadmin:latest > /dev/null
+ ### sudo docker inspect novatechweb/phpmyadmin:${TAG} &> /dev/null && \
+ ###     sudo docker rmi novatechweb/phpmyadmin:${TAG}
+ ### sudo docker tag novatechweb/phpmyadmin:latest novatechweb/phpmyadmin:${TAG}
 
 # ************************************************************
 # start phpmyadmin and link it to the database
@@ -115,5 +115,5 @@ sudo docker run -d --name ${NAME_WIKI_PHPMYADMIN_CONTAINER} \
   -e PMA_USERNAME="${PHPMYADMIN_PMA_USERNAME}" \
   -e PMA_PASSWORD="${PHPMYADMIN_PMA_PASSWD}" \
   -p ${PHPMYADMIN_OPEN}:80 \
-  docker-phpmyadmin:${TAG}
-#  corbinu/docker-phpmyadmin:${TAG}
+  corbinu/docker-phpmyadmin:${TAG}
+#  novatechweb/phpmyadmin:${TAG}

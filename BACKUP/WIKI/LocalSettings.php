@@ -29,7 +29,7 @@ $wgScriptPath = "";
 $wgScriptExtension = ".php";
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "http://172.16.71.113";
+$wgServer = "http://172.16.71.103";
 
 ## The relative URL path to the skins directory
 $wgStylePath = "$wgScriptPath/skins";
@@ -147,6 +147,6 @@ require_once "$IP/extensions/WikiEditor/WikiEditor.php";
 
 # make the database read only for backups and restores: set variable
 # $wgReadOnly = 'Dumping Database, Access will be restored shortly';
-#wgReadOnly
+$wgReadOnly = 'Restoring Database from backup, Access will be restored shortly.';
 
 ?>

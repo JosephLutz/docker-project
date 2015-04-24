@@ -1,6 +1,3 @@
 [submodule "docker-websvn"]
 	path = docker-svn
 	url = https://github.com/cipherwizard/docker-websvn.git
-[submodule "docker-phpmyadmin"]
-	path = docker-phpmyadmin
-	url = https://github.com/corbinu/docker-phpmyadmin.git

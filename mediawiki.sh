@@ -60,7 +60,7 @@ sudo docker inspect ${NAME_WIKI_MYSQL_CONTAINER} > /dev/null
 printf 'Waiting for MySQL database to finish starting up.\n'
 while ! \
     echo "SHOW GLOBAL STATUS;" | \
-    docker exec -i "${NAME_WIKI_MYSQL_CONTAINER}" \
+    sudo docker exec -i "${NAME_WIKI_MYSQL_CONTAINER}" \
       mysql \
         --host=localhost \
         --user="${MEDIAWIKI_USER}" \
