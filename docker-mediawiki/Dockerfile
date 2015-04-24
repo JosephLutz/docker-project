@@ -18,5 +18,8 @@ RUN rm -rf /var/www/html/{LocalSettings.php,images} && \
 		/var/www-shared/html/LocalSettings.php \
 		/var/www-shared/html/images
 
+# wget https://extdist.wmflabs.org/dist/extensions/LdapAuthentication-REL1_24-24a399e.tar.gz
+# tar -xzf LdapAuthentication-REL1_24-24a399e.tar.gz -C /var/www/mediawiki/extensions
+
 # specify the volumes directly related to this image
 VOLUME ["/var/www-shared/html"]
