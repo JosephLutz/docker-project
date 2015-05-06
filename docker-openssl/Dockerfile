@@ -6,18 +6,17 @@
 FROM debian:8
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+    openssl \
+    ca-certificates && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
 # copy over files
 COPY ./docker-entrypoint.sh /
 
-# set any environment variables
-ENV SSL_BASE_DIR /etc/apache2/ssl
-ENV SSL_BASE_FILES svn git django wiki openldap
-ENV IMPORT_EXPORT_PATH /tmp/import_export
-ENV SUBJ /C=US/ST=Kansas/L=Lenexa/O=Novatech/CN=svn.novatech-llc.com
-ENV BYTES 2048
-ENV DAYS 365
-
 # create the openssl directory volumes
-VOLUME ["/etc/apache2/ssl"]
+VOLUME ["/etc/ssl", "/usr/share/ca-certificates", "/usr/local/share/ca-certificates", "/etc/grid-security"]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

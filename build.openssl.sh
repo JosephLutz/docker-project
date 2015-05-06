@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Example backup commands
-#   sudo docker run -ti --rm --volumes-from "${NAME_OPENSSL_DV}" -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export ${NAME_OPENSSL_IMAGE}:latest backup
-# Example restore commands
-#   sudo docker run -ti --rm --volumes-from "${NAME_OPENSSL_DV}" -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export ${NAME_OPENSSL_IMAGE}:latest restore
+# Example archive commands
+#   sudo docker run -i --rm --volumes-from "${NAME_OPENSSL_DV}" ${NAME_OPENSSL_IMAGE}:latest archive > ${HOST_OPENSSL_BACKUP_DIR}/openssl.tar
+# Example extract commands
+#   cat ${HOST_OPENSSL_BACKUP_DIR}/openssl.tar | sudo docker run -i --rm --volumes-from "${NAME_OPENSSL_DV}" ${NAME_OPENSSL_IMAGE}:latest extract
 # Example initial create
-#   sudo docker run -ti --rm --volumes-from "${NAME_OPENSSL_DV}" ${NAME_OPENSSL_IMAGE}:latest generate
+#   sudo docker run -ti --rm --volumes-from "${NAME_OPENSSL_DV}" -e SUBJ="/C=US/ST=Kansas/L=Lenexa/O=Novatech/CN=svn.novatech-llc.com" ${NAME_OPENSSL_IMAGE}:latest generate
 
 source config.sh
 set -e
@@ -23,7 +23,7 @@ sudo docker inspect debian:8 > /dev/null
 
 # ************************************************************
 # create docker images:
-sudo docker inspect ${NAME_OPENSSL_IMAGE} &> /dev/null && {
+sudo docker inspect ${NAME_OPENSSL_IMAGE}:${TAG} &> /dev/null && {
 	# an image already exists with the name and tag we are trying to create.
 	# move it to the latest tag so it will be updated and then renamed
 	sudo docker tag ${NAME_OPENSSL_IMAGE}:${TAG} ${NAME_OPENSSL_IMAGE}:latest
@@ -43,7 +43,9 @@ sudo docker inspect ${NAME_OPENSSL_DV} &> /dev/null || \
       ${NAME_OPENSSL_IMAGE}:${TAG} true
 
 # ************************************************************
-# generating self signed keys in the data volume
-sudo docker run -ti --rm \
-  --volumes-from "${NAME_OPENSSL_DV}" \
-  ${NAME_OPENSSL_IMAGE}:${TAG} generate
+# extract data contained in openssl data volume
+sudo true
+cat ${HOST_OPENSSL_BACKUP_DIR}/openssl.tar | \
+    sudo docker run -i --rm \
+      --volumes-from "${NAME_OPENSSL_DV}" \
+      ${NAME_OPENSSL_IMAGE}:${TAG} extract
