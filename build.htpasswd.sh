@@ -23,7 +23,7 @@ sudo docker inspect debian:8 > /dev/null
 
 # ************************************************************
 # create docker images:
-sudo docker inspect ${NAME_HTPASSWD_IMAGE} &> /dev/null && {
+sudo docker inspect ${NAME_HTPASSWD_IMAGE}:${TAG} &> /dev/null && {
 	# an image already exists with the name and tag we are trying to create.
 	# move it to the latest tag so it will be updated and then renamed
 	sudo docker tag ${NAME_HTPASSWD_IMAGE}:${TAG} ${NAME_HTPASSWD_IMAGE}:latest

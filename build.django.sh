@@ -18,7 +18,7 @@ sudo docker inspect ${NAME_LDAP_CONTAINER} > /dev/null
 
 # ************************************************************
 # create docker images:
-sudo docker inspect ${NAME_DJANGO_IMAGE} &> /dev/null && {
+sudo docker inspect ${NAME_DJANGO_IMAGE}:${TAG} &> /dev/null && {
 	# an image already exists with the name and tag we are trying to create.
 	# move it to the latest tag so it will be updated and then renamed
 	sudo docker tag ${NAME_DJANGO_IMAGE}:${TAG} ${NAME_DJANGO_IMAGE}:latest

@@ -129,4 +129,3 @@ readme=:install
 #
 # or have cgit search for each repository
 scan-path=/var/lib/git
-
