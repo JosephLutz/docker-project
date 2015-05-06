@@ -48,10 +48,9 @@ sudo docker rmi ${NAME_LDAP_IMAGE}:latest
 #     create ldap data volume if it dose not already exist
 sudo docker inspect ${NAME_LDAP_DV} &> /dev/null || \
     sudo docker run -ti --name "${NAME_LDAP_DV}" \
-      -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
-      ${NAME_LDAP_IMAGE}:${TAG} init_data_volumes
+      ${NAME_LDAP_IMAGE}:${TAG} echo "LDAP data volume"
 
-# setup data volumes
+# Load data into data volume
   # sudo docker run -ti --rm \
   #   --volumes-from "${NAME_LDAP_DV}" \
   #   -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
@@ -60,6 +59,8 @@ sudo docker run -ti --rm \
   --volumes-from "${NAME_LDAP_DV}" \
   -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
   ${NAME_LDAP_IMAGE}:${TAG} /bin/bash
+
+#      ${NAME_LDAP_IMAGE}:${TAG} init_data_volumes
 
 # ************************************************************
 # Start openldap for running on the linuxserver
