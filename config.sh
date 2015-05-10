@@ -82,3 +82,25 @@ CONTAINER_ENDING=""
   HOST_DJANGO_BACKUP_DIR=${BACKUP_DIR}/Django
   HOST_DJANGO_SRC_DIR=${BACKUP_DIR}/Django/code
 }
+
+ALL_IMAGES=( \
+    ${NAME_OPENSSL_IMAGE} \
+    ${NAME_HTPASSWD_IMAGE} \
+    ${NAME_SVN_IMAGE} \
+    ${NAME_GIT_IMAGE} \
+    ${NAME_WIKI_IMAGE} \
+    ${NAME_LDAP_IMAGE} \
+    ${NAME_DJANGO_IMAGE} \
+    )
+
+get_docker_dir() {
+    case $1 in
+        ${NAME_OPENSSL_IMAGE}) echo 'docker-openssl';;
+        ${NAME_HTPASSWD_IMAGE}) echo 'docker-htpasswd';;
+        ${NAME_SVN_IMAGE}) echo 'docker-svn';;
+        ${NAME_GIT_IMAGE}) echo 'docker-git';;
+        ${NAME_WIKI_IMAGE}) echo 'docker-mediawiki';;
+        ${NAME_LDAP_IMAGE}) echo 'docker-openldap';;
+        ${NAME_DJANGO_IMAGE}) echo 'docker-django';;
+    esac
+}
