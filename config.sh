@@ -1,4 +1,4 @@
-BACKUP_DIR=$(pwd)/BACKUP
+BACKUP_DIR=$(pwd)/../BACKUP
 
 TAG="current"
 CONTAINER_ENDING=""
