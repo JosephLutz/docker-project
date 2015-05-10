@@ -8,6 +8,10 @@ set -e
 # import   : imports the httpasswd file from the IMPORT_EXPORT_PATH
 # generate : creates an initial httpasswd file with the novatech user
 
+IMPORT_EXPORT_PATH=/tmp/import_export
+PASSWD_BASE_DIR=/etc/htpasswd
+HTPASSWD_FILES=${HTPASSWD_FILES:=svn.passwd git.passwd}
+
 case ${1} in
     backup)
         # command to export the httpasswd file for backup
@@ -31,10 +35,9 @@ case ${1} in
         ;;
 
     generate)
+        USERNAME=${USERNAME:=novatech}
+        PASSWORD=${PASSWORD:=novatech}
         # commands to generate an initial user in the htpasswd file
-        apt-get update
-        DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-            apache2-utils
         for filename in ${HTPASSWD_FILES}
         do
             /usr/bin/htpasswd -bc \
