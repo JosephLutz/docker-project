@@ -60,4 +60,6 @@ sudo docker run -d --name "${NAME_SVN_CONTAINER}" \
   --volumes-from "${NAME_SVN_REPO_DV}" \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --volumes-from "${NAME_HTPASSWD_DV}" \
+  -e SVN_HOSTNAME="${SVN_HOSTNAME}" \
+  -v ${HOST_SVN_BACKUP_DIR}/apache2:/etc/apache2 \
   ${NAME_SVN_IMAGE}:${TAG}

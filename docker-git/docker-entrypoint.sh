@@ -16,6 +16,15 @@ GIT_PASSWD_FILENAME=git.passwd
 
 case ${1} in
     git)
+        GIT_HOSTNAME=${GIT_HOSTNAME:=git.example.com}
+        # Configure the hostname
+        sed -ie 's|GIT_HOSTNAME|'${GIT_HOSTNAME}'|' \
+            /etc/apache2/sites-available/000-default-ssl.conf \
+            /etc/apache2/sites-available/000-default.conf \
+            /etc/apache2/sites-available/001-git.conf \
+            /etc/apache2/sites-available/002-cgit.conf \
+            /etc/cgitrc \
+            /var/www/html/about.html
         # Apache gets grumpy about PID files pre-existing
         rm -f /var/run/apache2/apache2.pid
         # Start apache

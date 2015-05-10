@@ -39,6 +39,7 @@ sudo docker run -d --name "${NAME_DJANGO_CONTAINER}" \
   --restart=always \
   -P -p ${DJANGO_SECURE}:443 -p ${DJANGO}:80 \
   --volumes-from "${NAME_OPENSSL_DV}" \
+  -e DJANGO_HOSTNAME="${DJANGO_HOSTNAME}" \
   -v ${HOST_DJANGO_SRC_DIR}:/var/lib/django \
   -v ${HOST_DJANGO_BACKUP_DIR}:/tmp/import_export \
   --link ${NAME_LDAP_CONTAINER}:ldap \

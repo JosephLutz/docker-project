@@ -6,6 +6,8 @@ set -e
 STATIC_BACKUP_FILE="WIKI/mediawiki.tar.bz2"
 DATABASE_BACKUP_FILE="WIKI/wikidb.sql.bz2"
 
+# ************************************************************
+# check state before performing
 case ${1} in
     backup)
         if [[ -f ${BACKUP_DIR}/${STATIC_BACKUP_FILE} ]] ; then
@@ -52,7 +54,6 @@ case ${1} in
         exit 0
         ;;
 esac
-
 
 sudo docker inspect ${NAME_WIKI_CONTAINER} > /dev/null
 sudo docker inspect ${NAME_WIKI_MYSQL_CONTAINER} > /dev/null

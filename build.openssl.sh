@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Example archive commands
-#   sudo docker run -i --rm --volumes-from "${NAME_OPENSSL_DV}" ${NAME_OPENSSL_IMAGE}:latest archive > ${HOST_OPENSSL_BACKUP_DIR}/openssl.tar
+#   sudo docker run -i --rm --volumes-from "${NAME_OPENSSL_DV}" ${NAME_OPENSSL_IMAGE}:${TAG} archive > ${HOST_OPENSSL_BACKUP_DIR}/openssl.tar
 # Example extract commands
-#   cat ${HOST_OPENSSL_BACKUP_DIR}/openssl.tar | sudo docker run -i --rm --volumes-from "${NAME_OPENSSL_DV}" ${NAME_OPENSSL_IMAGE}:latest extract
+#   cat ${HOST_OPENSSL_BACKUP_DIR}/openssl.tar | sudo docker run -i --rm --volumes-from "${NAME_OPENSSL_DV}" ${NAME_OPENSSL_IMAGE}:${TAG} extract
 # Example initial create
-#   sudo docker run -ti --rm --volumes-from "${NAME_OPENSSL_DV}" -e SUBJ="/C=US/ST=Kansas/L=Lenexa/O=Novatech/CN=svn.novatech-llc.com" ${NAME_OPENSSL_IMAGE}:latest generate
+#   sudo docker run -ti --rm --volumes-from "${NAME_OPENSSL_DV}" -e SUBJ="/C=US/ST=Kansas/L=Lenexa/O=Novatech/CN=svn.novatech-llc.com" ${NAME_OPENSSL_IMAGE}:${TAG} generate
 
 source config.sh
 set -e

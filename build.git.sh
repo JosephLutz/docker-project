@@ -60,4 +60,5 @@ sudo docker run -d --name "${NAME_GIT_CONTAINER}" \
   --volumes-from "${NAME_GIT_REPO_DV}" \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --volumes-from "${NAME_HTPASSWD_DV}" \
+  -e GIT_HOSTNAME="${GIT_HOSTNAME}" \
   ${NAME_GIT_IMAGE}:${TAG}

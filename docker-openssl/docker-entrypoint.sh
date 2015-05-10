@@ -9,6 +9,7 @@ set -e
 # generate : generates a self signed certificate authority
 
 VOLUME_DIR_CONTENTS="/etc/ssl/* /usr/share/ca-certificates/* /usr/local/share/ca-certificates/* /etc/grid-security/*"
+SSL_BASE_DIR="/etc/ssl"
 
 case ${1} in
     archive)
@@ -32,9 +33,10 @@ case ${1} in
         do
             openssl req -newkey rsa:${BYTES} -x509 -days ${DAYS} -nodes \
                 -keyout ${SSL_BASE_DIR}/private/${base_filename}.key \
-                -out ${SSL_BASE_DIR}/private/${base_filename}.pem \
+                -out ${SSL_BASE_DIR}/private/${base_filename}.crt \
                 -subj ${SUBJ}
         done
+        touch ${SSL_BASE_DIR}/private/${base_filename}_bundle.crt
         update-ca-certificates --fresh
         ;;
 

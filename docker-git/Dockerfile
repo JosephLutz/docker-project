@@ -80,6 +80,9 @@ COPY \
     config/002-cgit.conf \
         /etc/apache2/sites-available/
 COPY \
+    config/about.html \
+        /var/www/html/about.html
+COPY \
     config/cgitrc \
         /etc/
 COPY ./docker-entrypoint.sh \

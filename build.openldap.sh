@@ -69,6 +69,7 @@ sudo docker run -d --name "${NAME_LDAP_CONTAINER}" \
   --restart=always \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --volumes-from "${NAME_LDAP_DV}" \
+  -e LDAP_HOSTNAME="${LDAP_HOSTNAME}" \
   ${NAME_LDAP_IMAGE}:${TAG}
 
 #  -P -p ${OPENLDAP}:389 -p ${OPENLDAP_SECURE}:636 \

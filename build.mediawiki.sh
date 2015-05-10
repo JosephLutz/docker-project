@@ -77,6 +77,7 @@ sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
   -e MEDIAWIKI_DB_NAME=wikidb \
   -e MEDIAWIKI_DB_USER="${MEDIAWIKI_USER}" \
   -e MEDIAWIKI_DB_PASSWORD="${MEDIAWIKI_PASSWORD}" \
+  -e WIKI_HOSTNAME="${WIKI_HOSTNAME}" \
   --volumes-from "${NAME_WIKI_DV}" \
   --volumes-from "${NAME_OPENSSL_DV}" \
   --link ${NAME_WIKI_MYSQL_CONTAINER}:mysql \
@@ -84,4 +85,4 @@ sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
 
 # ************************************************************
 # restore mediawiki settings
-./mediawiki.sh restore
+./docker-mediawiki/mediawiki.sh restore

@@ -50,13 +50,13 @@ max-stats=year
 #side-by-side-diffs=1
 
 # Specify some default clone urls using macro expansion
-clone-url=https://git.novatech-llc.com/$CGIT_REPO_URL
+clone-url=https://GIT_HOSTNAME/$CGIT_REPO_URL
 
 # Set the title and heading of the repository index page
-root-title=NovaTech-LLC git repositories
+root-title=git repositories
 
 # Set a subheading for the repository index page
-root-desc=tracking NovaTech software development
+root-desc=tracking software development
 
 # Include some more info about example.com on the index page
 root-readme=/var/www/html/about.html
