@@ -62,7 +62,7 @@ case ${1} in
             fi
             repo_name=$(echo ${archive_file} | sed 's/\.backup\.tar\.gz$//' | sed 's/\.mirror\.tar\.gz$//')
             echo "[RESTORE REPOSITORY] : ${repo_name}"
-            [[ ! -e ${GIT_BASE_DIR}/${repo_name} ]] && rm -rf ${GIT_BASE_DIR}/${repo_name}
+            [[ -e ${GIT_BASE_DIR}/${repo_name} ]] && rm -rf ${GIT_BASE_DIR}/${repo_name}
             mkdir ${GIT_BASE_DIR}/${repo_name}
             tar -xzf ${IMPORT_EXPORT_PATH}/${archive_file} --directory=${GIT_BASE_DIR}/${repo_name}
             pushd ${GIT_BASE_DIR}/${repo_name}
@@ -85,6 +85,7 @@ case ${1} in
         do
             if [[ -d ${GIT_BASE_DIR}/${repo_name} ]] ; then
                 echo "Repository already exists: ${repo_name}"
+                continue
             fi
             # create new bare repository
             mkdir ${GIT_BASE_DIR}/${repo_name}.git
