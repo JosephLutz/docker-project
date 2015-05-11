@@ -13,13 +13,25 @@ SSL_BASE_DIR="/etc/ssl"
 
 case ${1} in
     archive)
-        cd /
-        tar -cp ${VOLUME_DIR_CONTENTS}
+        /bin/tar \
+            --create \
+            --preserve-permissions \
+            --same-owner \
+            --directory=/ \
+            --to-stdout \
+            ${VOLUME_DIR_CONTENTS}
+            #--sort=name \
         ;;
 
     extract)
         rm -rf ${VOLUME_DIR_CONTENTS}
-        tar -xpsC /
+        /bin/tar \
+            --extract \
+            --preserve-permissions \
+            --preserve-order \
+            --same-owner \
+            --directory=/ \
+            -f -
         update-ca-certificates --fresh
         ;;
 
