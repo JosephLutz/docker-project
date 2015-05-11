@@ -3,8 +3,8 @@
 source config.sh
 set -e
 
-STATIC_BACKUP_FILE="WIKI/mediawiki.tar.bz2"
-DATABASE_BACKUP_FILE="WIKI/wikidb.sql.bz2"
+STATIC_BACKUP_FILE="WIKI/mediawiki.tar"
+DATABASE_BACKUP_FILE="WIKI/wikidb.sql"
 
 # ************************************************************
 # check state before performing
@@ -121,7 +121,8 @@ case ${1} in
                 --directory=/ \
                 --to-stdout \
                 /var/www-shared/html \
-            | bzip2 -zc > ${BACKUP_DIR}/${STATIC_BACKUP_FILE}
+            > ${BACKUP_DIR}/${STATIC_BACKUP_FILE}
+                #--sort=name \
         fi
 
         # ************************************************************
@@ -140,7 +141,7 @@ case ${1} in
                 --hex-blob \
                 --tz-utc \
                 wikidb \
-            | bzip2 -zc > ${BACKUP_DIR}/${DATABASE_BACKUP_FILE}
+            > ${BACKUP_DIR}/${DATABASE_BACKUP_FILE}
         fi
         ;;
 
@@ -174,7 +175,7 @@ case ${1} in
         then
             echo "Restoring the mediawiki static files backup"
             sudo true
-            bzcat -dc ${BACKUP_DIR}/${STATIC_BACKUP_FILE} | \
+            cat ${BACKUP_DIR}/${STATIC_BACKUP_FILE} | \
             sudo docker exec -i \
               ${NAME_WIKI_CONTAINER} \
               /bin/tar \
@@ -184,6 +185,12 @@ case ${1} in
                 --same-owner \
                 --directory=/ \
                 -f -
+            echo "Set hostname/wgServer for mediawiki"
+            sudo docker exec -it \
+              ${NAME_WIKI_CONTAINER} \
+              /bin/sed -ie \
+                's|$wgServer = "http://.*|$wgServer = "http://'${WIKI_HOSTNAME}'";|' \
+                /var/www-shared/html/LocalSettings.php
         fi
 
         # ************************************************************
@@ -192,7 +199,7 @@ case ${1} in
         then
             echo "Restoring the mediawiki database backup"
             sudo true
-            bzcat -dc ${BACKUP_DIR}/${DATABASE_BACKUP_FILE} | \
+            cat ${BACKUP_DIR}/${DATABASE_BACKUP_FILE} | \
             sudo docker exec -i \
               "${NAME_WIKI_MYSQL_CONTAINER}" \
               mysql \
