@@ -35,6 +35,13 @@ case ${1} in
 <Location /${repo_name}>
     DAV svn
     SVNPath ${SVN_BASE_DIR}/${repo_name}
+    AuthType Basic
+    AuthName "svn repository"
+    AuthUserFile /etc/htpasswd/svn.passwd
+    <RequireAll>
+        Require valid-user
+        Require ssl
+    </RequireAll>
 </Location>
 EOF
         done

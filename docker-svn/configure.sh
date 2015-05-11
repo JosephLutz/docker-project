@@ -6,7 +6,7 @@ SVN_BASE_DIR=/var/lib/svn
 # Create a directory for a dead symlink
 mkdir /var/cache/websvn/tmp
 
-# comment out apache2 config file lines that refrence the environment variables
+# comment out apache2 config file lines that reference the environment variables
 sed -ie 's/^Mutex file/#Mutex file/' /etc/apache2/apache2.conf
 sed -ie 's/^PidFile /#PidFile /' /etc/apache2/apache2.conf
 sed -ie 's/^User /#User /' /etc/apache2/apache2.conf
@@ -26,9 +26,12 @@ ErrorLog /proc/self/fd/2
 CustomLog /proc/self/fd/1 combined
 EOF
 
+sed -ie 's|^CustomLog.*|CustomLog /proc/self/fd/1 combined|' /etc/apache2/conf-available/other-vhosts-access-log.conf
+rm -f /etc/apache2/mods-available/ssl.confe
+
 # set the SSLSessionCache directory
 sed -ie 's/\$[{]APACHE_RUN_DIR[}]/\/var\/run\/apache2/' /etc/apache2/mods-available/ssl.conf
-rm -f /etc/apache2/mods-available/ssl.confe
+rm -f /etc/apache2/conf-available/other-vhosts-access-log.confe
 
 # configure SVN_BASE_DIR for the WebSVN configuration
 sed -ie 's|SVN_BASE_DIR|'${SVN_BASE_DIR}'|' \
@@ -41,16 +44,6 @@ rm -f \
 # create apache domainname config
 echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
 a2enconf servername.conf
-
-# ## Make symlinks to the websvn files
-# #cd /var/www/html
-# #for i in /usr/share/websvn/*
-# #do
-# #	ln -s $(realpath ${i}) $(basename ${i})
-# #done
-
-# disable a config - wants to use an environment variable
-a2disconf other-vhosts-access-log
 
 # enable modules
 a2enmod ssl dav dav_svn
