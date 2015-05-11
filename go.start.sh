@@ -20,7 +20,7 @@ check_volumes() {
     then
         true
     else
-        ./go.sh ${servicee_name}
+        ./go ${servicee_name}
     fi
 }
 
@@ -59,13 +59,13 @@ do
             check_volumes "${NAME_OPENSSL_DV}" openssl
             stop_and_remove "${NAME_LDAP_CONTAINER}"
             printf 'Starting :'
-            sudo docker run -d --name "${NAME_LDAP_CONTAINER}" \
-                --restart=always \
-                --volumes-from "${NAME_OPENSSL_DV}" \
-                --volumes-from "${NAME_LDAP_DV}" \
-                -e LDAP_HOSTNAME="${LDAP_HOSTNAME}" \
-                ${NAME_LDAP_IMAGE}:${TAG}
-            #    -P -p ${OPENLDAP}:389 -p ${OPENLDAP_SECURE}:636 \
+#            sudo docker run -d --name "${NAME_LDAP_CONTAINER}" \
+#                --restart=always \
+#                --volumes-from "${NAME_OPENSSL_DV}" \
+#                --volumes-from "${NAME_LDAP_DV}" \
+#                -e LDAP_HOSTNAME="${LDAP_HOSTNAME}" \
+#                ${NAME_LDAP_IMAGE}:${TAG}
+#                -P -p ${OPENLDAP}:389 -p ${OPENLDAP_SECURE}:636 \
             ;;
 
         svn)
@@ -81,7 +81,7 @@ do
                 --volumes-from "${NAME_HTPASSWD_DV}" \
                 -e SVN_HOSTNAME="${SVN_HOSTNAME}" \
                 ${NAME_SVN_IMAGE}:${TAG}
-            #    -v ${HOST_SVN_BACKUP_DIR}/apache2:/etc/apache2 \
+#                -v ${HOST_SVN_BACKUP_DIR}/apache2:/etc/apache2 \
             ;;
 
         git)
@@ -152,15 +152,15 @@ do
             check_volumes "${NAME_OPENSSL_DV}" openssl
             stop_and_remove "${NAME_DJANGO_CONTAINER}"
             printf 'Starting :'
-            sudo docker run -d --name "${NAME_DJANGO_CONTAINER}" \
-                --restart=always \
-                -P -p ${DJANGO_SECURE}:443 -p ${DJANGO}:80 \
-                --volumes-from "${NAME_OPENSSL_DV}" \
-                -e DJANGO_HOSTNAME="${DJANGO_HOSTNAME}" \
-                -v ${HOST_DJANGO_SRC_DIR}:/var/lib/django \
-                -v ${HOST_DJANGO_BACKUP_DIR}:/tmp/import_export \
-                --link ${NAME_LDAP_CONTAINER}:ldap \
-                ${NAME_DJANGO_IMAGE}:${TAG}
+#            sudo docker run -d --name "${NAME_DJANGO_CONTAINER}" \
+#                --restart=always \
+#                -P -p ${DJANGO_SECURE}:443 -p ${DJANGO}:80 \
+#                --volumes-from "${NAME_OPENSSL_DV}" \
+#                -e DJANGO_HOSTNAME="${DJANGO_HOSTNAME}" \
+#                -v ${HOST_DJANGO_SRC_DIR}:/var/lib/django \
+#                -v ${HOST_DJANGO_BACKUP_DIR}:/tmp/import_export \
+#                --link ${NAME_LDAP_CONTAINER}:ldap \
+#                ${NAME_DJANGO_IMAGE}:${TAG}
             ;;
 
         *)
