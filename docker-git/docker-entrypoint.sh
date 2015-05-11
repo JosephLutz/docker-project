@@ -3,6 +3,7 @@ set -e
 
 GIT_BASE_DIR=/var/lib/git
 SSL_BASE_DIR=/etc/apache2/ssl
+IMPORT_EXPORT_PATH=/tmp/import_export
 GIT_PASSWD_BASE_DIR=/etc/htpasswd/
 GIT_PASSWD_FILENAME=git.passwd
 

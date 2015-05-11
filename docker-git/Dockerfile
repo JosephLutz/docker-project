@@ -95,9 +95,6 @@ RUN ["/bin/bash", "/configure.sh"]
 # specify which network ports will be used
 EXPOSE 80 443
 
-# set any environment variables
-ENV IMPORT_EXPORT_PATH /tmp/import_export
-
 # specify the volumes directly related to this image
 VOLUME ["/var/lib/git"]
 
