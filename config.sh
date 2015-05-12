@@ -4,13 +4,13 @@ TAG="current"
 CONTAINER_ENDING=""
 #CONTAINER_ENDING="_${TAG}"
 { # variables for OpenSSL
-  NAME_OPENSSL_IMAGE="novatechweb/data_openssl"
+  NAME_OPENSSL_IMAGE="novatechweb/openssl"
   NAME_OPENSSL_DV="DV_openssl${CONTAINER_ENDING}"
   HOST_OPENSSL_BACKUP_DIR=${BACKUP_DIR}/openssl
 }
 
 { # variables for htpasswd
-  NAME_HTPASSWD_IMAGE="novatechweb/data_htpasswd"
+  NAME_HTPASSWD_IMAGE="novatechweb/htpasswd"
   NAME_HTPASSWD_DV="DV_htpasswd${CONTAINER_ENDING}"
 }
 
