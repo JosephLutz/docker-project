@@ -2,22 +2,20 @@
 source config.sh
 set -e
 
-move_tag_to_latest() {
-    local image_name
-    image_name=${1}
-    sudo true
-    if sudo docker inspect "${image_name}:${TAG}" &> /dev/null
-    then
-        sudo docker tag "${image_name}:${TAG}" "${image_name}:latest"
-        sudo docker rmi "${image_name}:${TAG}"
-    fi
-}
-
 move_latest_to_tag() {
     local image_name
     image_name=${1}
     sudo true
     sudo docker inspect "${image_name}:latest" &> /dev/null
+    if sudo docker inspect "docker.io/${image_name}:${TAG}" &> /dev/null
+    then
+        # This is to get around the Issue with the CentOS changes to the Docker package
+        sudo docker rmi "docker.io/${image_name}:${TAG}"
+    fi
+    if sudo docker inspect "${image_name}:${TAG}" &> /dev/null
+    then
+        sudo docker rmi "${image_name}:${TAG}"
+    fi
     sudo docker tag "${image_name}:latest" "${image_name}:${TAG}"
     sudo docker rmi "${image_name}:latest"
 }
@@ -28,7 +26,6 @@ build_image() {
     printf '***************************************\n'
     printf 'Building image : %s\n' "${image_name}"
     printf '***************************************\n'
-    move_tag_to_latest "${image_name}"
     sudo docker build --rm=true --tag="${image_name}" ./$(get_docker_dir ${image_name})
     move_latest_to_tag "${image_name}"
 }
