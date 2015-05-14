@@ -46,7 +46,7 @@ echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
 a2enconf servername.conf
 
 # enable modules
-a2enmod ssl dav dav_svn
+a2enmod ssl dav dav_svn authnz_ldap
 
 # Enable the site
 a2ensite \

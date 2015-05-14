@@ -9,6 +9,7 @@ ALL_SERVICES=( \
     wiki \
     phpmyadmin \
     djangp \
+    phpldapadmin \
     )
 
 check_volumes() {
@@ -59,18 +60,19 @@ do
             check_volumes "${NAME_OPENSSL_DV}" openssl
             stop_and_remove "${NAME_LDAP_CONTAINER}"
             printf 'Starting :'
-#            sudo docker run -d --name "${NAME_LDAP_CONTAINER}" \
-#                --restart=always \
-#                --volumes-from "${NAME_OPENSSL_DV}" \
-#                --volumes-from "${NAME_LDAP_DV}" \
-#                -e LDAP_HOSTNAME="${LDAP_HOSTNAME}" \
-#                ${NAME_LDAP_IMAGE}:${TAG}
-#                -P -p ${OPENLDAP}:389 -p ${OPENLDAP_SECURE}:636 \
+            sudo docker run -d --name "${NAME_LDAP_CONTAINER}" \
+                --restart=always \
+                --volumes-from "${NAME_OPENSSL_DV}" \
+                --volumes-from "${NAME_LDAP_DV}" \
+                -e LDAP_HOSTNAME="${LDAP_HOSTNAME}" \
+                -P -p ${OPENLDAP}:389 -p ${OPENLDAP_SECURE}:636 \
+                ${NAME_LDAP_IMAGE}:${TAG}
             ;;
 
         svn)
             check_volumes "${NAME_OPENSSL_DV}" openssl
             check_volumes "${NAME_HTPASSWD_DV}" htpasswd
+            check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_SVN_CONTAINER}"
             printf 'Starting :'
             sudo docker run -d --name "${NAME_SVN_CONTAINER}" \
@@ -80,6 +82,7 @@ do
                 --volumes-from "${NAME_OPENSSL_DV}" \
                 --volumes-from "${NAME_HTPASSWD_DV}" \
                 -e SVN_HOSTNAME="${SVN_HOSTNAME}" \
+                --link ${NAME_LDAP_CONTAINER}:ldap \
                 ${NAME_SVN_IMAGE}:${TAG}
 #                -v ${HOST_SVN_BACKUP_DIR}/apache2:/etc/apache2 \
             ;;
@@ -87,6 +90,7 @@ do
         git)
             check_volumes "${NAME_OPENSSL_DV}" openssl
             check_volumes "${NAME_HTPASSWD_DV}" htpasswd
+            check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_GIT_CONTAINER}"
             printf 'Starting :'
             sudo docker run -d --name "${NAME_GIT_CONTAINER}" \
@@ -96,11 +100,13 @@ do
                 --volumes-from "${NAME_OPENSSL_DV}" \
                 --volumes-from "${NAME_HTPASSWD_DV}" \
                 -e GIT_HOSTNAME="${GIT_HOSTNAME}" \
+                --link ${NAME_LDAP_CONTAINER}:ldap \
                 ${NAME_GIT_IMAGE}:${TAG}
             ;;
 
         wiki)
             check_volumes "${NAME_OPENSSL_DV}" openssl
+            check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_WIKI_MYSQL_CONTAINER}"
             stop_and_remove "${NAME_WIKI_CONTAINER}"
             printf 'Starting :'
@@ -122,6 +128,7 @@ do
                 --volumes-from "${NAME_WIKI_DV}" \
                 --volumes-from "${NAME_OPENSSL_DV}" \
                 --link ${NAME_WIKI_MYSQL_CONTAINER}:mysql \
+                --link ${NAME_LDAP_CONTAINER}:ldap \
                 ${NAME_WIKI_IMAGE}:${TAG}
             ;;
 
@@ -150,6 +157,7 @@ do
 
         djangp)
             check_volumes "${NAME_OPENSSL_DV}" openssl
+            check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_DJANGO_CONTAINER}"
             printf 'Starting :'
 #            sudo docker run -d --name "${NAME_DJANGO_CONTAINER}" \
@@ -163,6 +171,18 @@ do
 #                ${NAME_DJANGO_IMAGE}:${TAG}
             ;;
 
+        phpldapadmin)
+            check_volumes "${NAME_LDAP_CONTAINER}" ldap
+            stop_and_remove "${NAME_PHPLDAPADMIN}"
+            sudo docker run -d --name "${NAME_PHPLDAPADMIN}" \
+                --restart=always \
+                -P -p ${PHPLDAPADMIN_OPEN}:80 -p ${PHPLDAPADMIN}:443 \
+                -e HTTPS=false \
+                -e LDAP_HOSTS=ldap \
+                --link ${NAME_LDAP_CONTAINER}:ldap \
+                osixia/phpldapadmin
+            ;;
+
         *)
             printf 'Available services:\n'
             for service_name in ${ALL_SERVICES[*]}
@@ -173,3 +193,28 @@ do
     esac
     printf '\n\n\n'
 done
+
+# docker run --name "phpldapadmin" -P -p 172.16.71.110:80:80 -p 172.16.71.110:443:443 -e HTTPS=false -e LDAP_HOSTS=ldap.novatech-llc.com -d --link ldap:ldap.novatech-llc.com osixia/phpldapadmin
+# docker run --name "phpldapadmin" -P -p 172.16.71.110:80:80 -p 172.16.71.110:443:443 -e HTTPS=false -e LDAP_HOSTS=ldap.novatech-llc.com -d                                   osixia/phpldapadmin
+# docker run --rm -p 172.16.71.110:443:443 -e LDAP_HOSTS=ldap.novatech-llc.com -d osixia/phpldapadmin
+# docker pull osixia/phpldapadmin
+# docker exec -it ldap bash
+# docker run -ti --rm --volumes-from "DV_ldap" -v $(pwd)/../BACKUP/LDAP:/tmp/import_export novatechweb/ldap:current bash
+# docker run -d --name "ldap" --restart=always --volumes-from "DV_openssl" --volumes-from "DV_ldap" -e LDAP_HOSTNAME="ldap.novatech-llc.com" -P -p 172.16.71.110:389:389 -p 172.16.71.110:636:636 novatechweb/ldap:current
+# ./go ldap
+
+# apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends vim slapd ldap-utils
+# vim /etc/ldap/ldap.conf
+# # BASE    dc=ldap,dc=novatech-llc,dc=com
+# # URI     ldap://ldap.novatech-llc.com
+# dpkg-reconfigure slapd
+# # No
+# # ldap.novatech-llc.com
+# # Lenexa
+# # novatech
+# # novatech
+# # HDB
+# # Yes
+# # No
+
+# # ldapsearch -x -h localhost

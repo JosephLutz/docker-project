@@ -1,0 +1,92 @@
+# global configuration entry
+dn: cn=config
+objectClass: olcGlobal
+cn: config
+structuralObjectClass: olcGlobal
+olcIdleTimeout: 0
+olcLogLevel: -1
+olcToolThreads: 1
+olcArgsFile: /var/run/slapd/slapd.args
+olcPidFile: /var/run/slapd/slapd.pid
+
+#dn: cn=module,cn=config
+#objectClass: olcModuleList
+#cn: module
+#olcModulePath: /usr/lib/ldap
+#olcModuleLoad: back_mdb
+#structuralObjectClass: olcModuleList
+
+# internal schema
+dn: cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: schema
+structuralObjectClass: olcSchemaConfig
+
+# include the core schema
+include: file:///tmp/import_export/schema/core.ldif
+
+#dn: olcBackend=mdb,cn=config
+#objectClass: olcBackendConfig
+#olcBackend: mdb
+#structuralObjectClass: olcBackendConfig
+
+# global database parameters
+dn: olcDatabase=frontend,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcFrontendConfig
+olcDatabase: frontend
+olcReadOnly: FALSE
+olcAccess: to * by * read
+
+# set a rootpw for the config database so we can bind.
+#     deny access to everyone else.
+dn: olcDatabase=config,cn=config
+objectClass: olcDatabaseConfig
+olcDatabase: config
+olcRootPW: secret
+olcAccess: to * by * none
+
+
+#dn: olcDatabase={-1}frontend,cn=config
+#objectClass: olcDatabaseConfig
+#objectClass: olcFrontendConfig
+#olcDatabase: {-1}frontend
+#olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+#olcAccess: {1}to dn.exact="" by * read
+#olcAccess: {2}to dn.base="cn=Subschema" by * read
+#olcSizeLimit: 500
+#structuralObjectClass: olcDatabaseConfig
+#
+#dn: olcDatabase={0}config,cn=config
+#objectClass: olcDatabaseConfig
+#olcDatabase: {0}config
+#olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+#olcRootDN: cn=admin,cn=config
+#structuralObjectClass: olcDatabaseConfig
+#
+#dn: olcDatabase={1}mdb,cn=config
+#objectClass: olcDatabaseConfig
+#objectClass: olcMdbConfig
+#olcDatabase: {1}mdb
+#olcDbDirectory: /var/lib/ldap
+#olcSuffix: dc=nodomain
+#olcAccess: {0}to attrs=userPassword,shadowLastChange by self write by anonymous auth by * none
+#olcAccess: {1}to dn.base="" by * read
+#olcAccess: {2}to * by * read
+#olcLastMod: TRUE
+#olcRootDN: cn=admin,dc=nodomain
+#olcRootPW:: e1NTSEF9TjNLOE4zZFlIWEswZmJMWVVzVFVGWE9MWUNnT29MUlU=
+#olcDbCheckpoint: 512 30
+#olcDbIndex: objectClass eq
+#olcDbIndex: cn,uid eq
+#olcDbIndex: uidNumber,gidNumber eq
+#olcDbIndex: member,memberUid eq
+#olcDbMaxSize: 1073741824
+#structuralObjectClass: olcMdbConfig
+
+
+#dn: olcDatabase=config,cn=config
+#objectClass: olcDatabaseConfig
+#olcDatabase: config
+#olcRootDN: "uid=ldapmanager,cn=example.com,cn=digest-md5,cn=auth"
+#olcRootDN: cn=Manager,dc=example,dc=com

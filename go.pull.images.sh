@@ -10,6 +10,8 @@ sudo docker pull mysql:latest
 sudo docker pull synctree/mediawiki
 sudo docker pull corbinu/docker-phpmyadmin:latest
 
+sudo docker pull osixia/phpldapadmin
+
 printf '***************************************\n'
 printf 'Images used as they are\n'
 
