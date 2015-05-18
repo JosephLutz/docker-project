@@ -53,7 +53,11 @@ echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
 a2enconf servername.conf
 
 # enable modules
-a2enmod ssl cgi authnz_ldap
+a2enmod \
+  authnz_ldap \
+  cgi \
+  ldap \
+  ssl
 
 # Enable the site
 a2ensite \

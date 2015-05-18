@@ -79,6 +79,8 @@ COPY \
     config/001-git.conf \
     config/002-cgit.conf \
         /etc/apache2/sites-available/
+COPY config/ldap.conf \
+        /etc/apache2/mods-available/
 COPY \
     config/about.html \
         /var/www/html/about.html
