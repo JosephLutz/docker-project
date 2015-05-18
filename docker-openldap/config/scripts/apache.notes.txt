@@ -1,0 +1,69 @@
+<Directory /usr/share/websvn>
+    Options FollowSymLinks 
+    AllowOverride None
+    AuthType Basic
+    AuthName "svn repository"
+    AuthUserFile /etc/htpasswd/svn.passwd
+    <RequireAll>
+        Require valid-user
+        Require ssl
+        Require ip 172.16.0.0/16 192.168.0.0/16
+    </RequireAll>
+    <IfModule mod_php5.c>
+        php_flag magic_quotes_gpc Off
+        php_flag track_vars On
+    </IfModule>
+</Directory>
+
+<Directory /usr/share/websvn>
+    Options FollowSymLinks 
+    AllowOverride None
+    AuthType Basic
+    AuthBasicProvider ldap
+    AuthName "svn repository"
+    AuthLDAPURL "ldap://ldap/ou=user,dc=novatech?uid?sub?(objectClass=Person)"
+    AuthLDAPBindAuthoritative off
+    AuthLDAPSearchAsUser on
+    AuthLDAPCompareAsUser on
+    AuthLDAPBindDN cn=apache,dc=novatech
+    AuthLDAPBindPassword novatech
+    AuthLDAPGroupAttribute memberUid
+    AuthLDAPGroupAttributeIsDN off
+    <RequireAll>
+        Require valid-user
+        Require ssl
+        Require ip 172.16.0.0/16 192.168.0.0/16
+        Require ldap-group cn=%{SERVER_NAME},ou=group,dc=novatech
+    </RequireAll>
+    <IfModule mod_php5.c>
+        php_flag magic_quotes_gpc Off
+        php_flag track_vars On
+    </IfModule>
+</Directory>
+
+<Directory /usr/share/websvn>
+    Options FollowSymLinks 
+    AllowOverride None
+    AuthType Basic
+    AuthBasicProvider ldap
+    AuthName "svn repository"
+    AuthLDAPURL "ldap://ldap/ou=user,dc=novatech?uid?sub?(objectClass=Person)"
+    AuthLDAPBindAuthoritative off
+    AuthLDAPSearchAsUser on
+    AuthLDAPCompareAsUser on
+    AuthLDAPInitialBindAsUser on
+#    AuthLDAPInitialBindPattern "(.+)" "cn=joseph.lutz,ou=user,dc=novatech"
+    AuthLDAPInitialBindPattern "(.+)" "cn=$1,ou=user,dc=novatech"
+    AuthLDAPGroupAttribute memberUid
+    AuthLDAPGroupAttributeIsDN off
+    <RequireAll>
+        Require valid-user
+        Require ssl
+        Require ip 172.16.0.0/16 192.168.0.0/16
+        Require ldap-group cn=%{SERVER_NAME},ou=group,dc=novatech
+    </RequireAll>
+    <IfModule mod_php5.c>
+        php_flag magic_quotes_gpc Off
+        php_flag track_vars On
+    </IfModule>
+</Directory>
