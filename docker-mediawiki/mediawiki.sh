@@ -216,6 +216,7 @@ case ${1} in
         # convert database to latest version for mediawiki
         if [[ "${convert}" == "TRUE" ]]
         then
+            sleep 10 # This is just wrong. but aparently the file dose not exist after the containger has been started
             echo "Converting the mediawiki database to latest"
             sudo docker exec -i \
               ${NAME_WIKI_CONTAINER} \
