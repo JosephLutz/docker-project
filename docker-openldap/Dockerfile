@@ -1,9 +1,10 @@
 #
-# GIT Docker container
+# LDAP Docker container
 #
 # Version 0.1
 
-FROM debian:8
+#FROM debian:8
+FROM ubuntu:14.04
 MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 
 ENV OPENLDAP_VERSION 2.4
