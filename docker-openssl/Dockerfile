@@ -1,5 +1,5 @@
 #
-# SVN Docker container
+# openssl Docker container
 #
 # Version 0.0
 
