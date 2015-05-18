@@ -1,5 +1,5 @@
 #
-# GIT Docker container
+# htpasswd Docker container
 #
 # Version 0.0
 

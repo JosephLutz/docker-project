@@ -35,8 +35,8 @@ case ${1} in
         ;;
 
     generate)
-        USERNAME=${USERNAME:=novatech}
-        PASSWORD=${PASSWORD:=novatech}
+        USERNAME=${USERNAME:=username}
+        PASSWORD=${PASSWORD:=password}
         # commands to generate an initial user in the htpasswd file
         for filename in ${HTPASSWD_FILES}
         do
