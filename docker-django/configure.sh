@@ -23,6 +23,9 @@ ErrorLog /proc/self/fd/2
 CustomLog /proc/self/fd/1 combined
 EOF
 
+sed -ie 's|^CustomLog.*|CustomLog /proc/self/fd/1 combined|' /etc/apache2/conf-available/other-vhosts-access-log.conf
+rm -f /etc/apache2/mods-available/ssl.confe
+
 # set the SSLSessionCache directory
 sed -ie 's/\$[{]APACHE_RUN_DIR[}]/\/var\/run\/apache2/' \
   /etc/apache2/mods-available/ssl.conf
@@ -42,11 +45,10 @@ rm -f \
 echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
 a2enconf servername.conf
 
-# disable a config - wants to use an environment variable
-a2disconf other-vhosts-access-log
-
 # enable modules
-a2enmod ssl wsgi
+a2enmod \
+  ssl \
+  wsgi
 
 # Enable the site
 a2ensite \

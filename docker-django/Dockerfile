@@ -29,6 +29,8 @@ COPY \
     config/000-default.conf \
     config/000-django.conf \
         /etc/apache2/sites-available/
+COPY config/ldap.conf \
+        /etc/apache2/mods-available/
 
 ENV DJANGO_VERSION 1.8
 ENV DJANGO_LDAPDB_VERSION 0.3.2
