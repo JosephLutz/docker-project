@@ -1,0 +1,46 @@
+# LDAP
+require_once 'extensions/LdapAuthentication/LdapAuthentication.php';
+require_once 'includes/AuthPlugin.php';
+$wgAuth = new LdapAuthenticationPlugin();
+$wgLDAPDomainNames = array(
+  'openldap_example_com',
+);
+$wgLDAPServerNames = array(
+  'openldap_example_com' => 'ldap.example.com',
+);
+$wgLDAPUseLocal = false;
+$wgLDAPEncryptionType = array(
+  'openldap_example_com' => 'tls',
+);
+$wgLDAPPort = array(
+  'openldap_example_com' => 389,
+);
+$wgLDAPProxyAgent = array(
+  'openldap_example_com' => 'cn=readonly,dc=novatech',
+);
+$wgLDAPProxyAgentPassword = array(
+  'openldap_example_com' => '*****',
+);
+$wgLDAPSearchAttributes = array(
+  'openldap_example_com' => 'uid'
+);
+$wgLDAPBaseDNs = array(
+  'openldap_example_com' => 'dc=novatech',
+);
+# To pull e-mail address from LDAP
+$wgLDAPPreferences = array(
+  'openldap_example_com' => array( 'email' => 'mail')
+);
+# Group based restriction
+$wgLDAPGroupUseFullDN = array( "openldap_example_com"=>false );
+$wgLDAPGroupObjectclass = array( "openldap_example_com"=>"posixgroup" );
+$wgLDAPGroupAttribute = array( "openldap_example_com"=>"memberuid" );
+$wgLDAPGroupSearchNestedGroups = array( "openldap_example_com"=>false );
+$wgLDAPGroupNameAttribute = array( "openldap_example_com"=>"cn" );
+$wgLDAPRequiredGroups = array( "openldap_example_com"=>array("cn=wiki.novatech-llc.com,ou=group,dc=novatech"));
+$wgLDAPLowerCaseUsername = array(
+  'openldap_example_com' => true,
+);
+
+$wgLDAPRetrievePrefs = array( 'testADDomain' => true );
+#$wgLDAPPreferences = array('testADdomain'=>array( "email"=>"mail","realname"=>"cn","nickname"=>"displayName"));
