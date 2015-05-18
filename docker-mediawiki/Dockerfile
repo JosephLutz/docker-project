@@ -9,6 +9,7 @@ MAINTAINER Joseph Lutz <Joseph.Lutz@novatechweb.com>
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
         git \
+        php5-ldap \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
