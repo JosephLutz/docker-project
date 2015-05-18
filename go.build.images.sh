@@ -37,13 +37,13 @@ images_to_build=( ${@} )
 for image_name in ${images_to_build[*]}
 do
     case ${image_name} in
-        ${NAME_OPENSSL_IMAGE})  build_image "${image_name}";;
-        ${NAME_HTPASSWD_IMAGE}) build_image "${image_name}";;
-        ${NAME_SVN_IMAGE})      build_image "${image_name}";;
-        ${NAME_GIT_IMAGE})      build_image "${image_name}";;
-        ${NAME_WIKI_IMAGE})     build_image "${image_name}";;
-        ${NAME_LDAP_IMAGE})     build_image "${image_name}";;
-        ${NAME_DJANGO_IMAGE})   build_image "${image_name}";;
+        "${NAME_HTPASSWD_IMAGE}" | \
+        "${NAME_OPENSSL_IMAGE}" | \
+        "${NAME_LDAP_IMAGE}" | \
+        "${NAME_SVN_IMAGE}" | \
+        "${NAME_GIT_IMAGE}" | \
+        "${NAME_WIKI_IMAGE}" | \
+        "${NAME_DJANGO_IMAGE}")   build_image "${image_name}";;
         *)
             printf 'Available images:\n'
             for image_name in ${ALL_IMAGES[*]}

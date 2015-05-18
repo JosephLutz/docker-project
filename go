@@ -4,7 +4,6 @@ set -e
 
 ALL_SERVICES=( \
     pull_images \
-    htpasswd \
     openssl \
     ldap \
     svn \
@@ -13,6 +12,7 @@ ALL_SERVICES=( \
     phpmyadmin \
     djangp \
     )
+#    htpasswd \
 
 services=( ${@} )
 [[ "${#services}" == "0" ]] && \
@@ -22,7 +22,7 @@ for service_name in ${services[*]}
 do
     case ${service_name} in
         all)
-            ./go.pull.images.sh
+#            ./go.pull.images.sh
             ./go.build.images.sh
             ./go.create.volumes.sh
             ./go.populate.volumes.sh

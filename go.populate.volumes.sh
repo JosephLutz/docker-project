@@ -3,7 +3,6 @@ source config.sh
 set -e
 
 ALL_SERVICES=( \
-    htpasswd \
     openssl \
     ldap \
     svn \
@@ -12,6 +11,7 @@ ALL_SERVICES=( \
     phpmyadmin \
     djangp \
     )
+#    htpasswd \
 
 services=( ${@} )
 [[ "${#services}" == "0" ]] && \
@@ -25,6 +25,8 @@ do
         htpasswd)
             sudo docker run -ti --rm \
                 --volumes-from "${NAME_HTPASSWD_DV}" \
+                -e USERNAME=novatech \
+                -e PASSWORD=novatech \
                 ${NAME_HTPASSWD_IMAGE}:${TAG} generate
             ;;
 
@@ -41,12 +43,22 @@ do
               #   --volumes-from "${NAME_LDAP_DV}" \
               #   -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
               #   ${NAME_LDAP_IMAGE}:${TAG} apply_ldif database.ldif
+            #sudo docker run -ti --rm \
+            #    --volumes-from "${NAME_LDAP_DV}" \
+            #    -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
+            #    ${NAME_LDAP_IMAGE}:${TAG} /bin/bash
+
+            #      ${NAME_LDAP_IMAGE}:${TAG} init_data_volumes
             sudo docker run -ti --rm \
                 --volumes-from "${NAME_LDAP_DV}" \
                 -v ${HOST_OPENLDAP_BACKUP_DIR}:/tmp/import_export \
-                ${NAME_LDAP_IMAGE}:${TAG} /bin/bash
-
-            #      ${NAME_LDAP_IMAGE}:${TAG} init_data_volumes
+                ${NAME_LDAP_IMAGE}:${TAG} /bin/tar \
+                    --extract \
+                    --preserve-permissions \
+                    --preserve-order \
+                    --same-owner \
+                    --directory=/ \
+                    -f /tmp/import_export/ldap.02.tar
             ;;
 
         svn)
@@ -65,8 +77,11 @@ do
             ;;
 
         wiki)
+            ./go.start.sh ldap
             ./go.start.sh ${service_name}
             ./docker-mediawiki/mediawiki.sh restore
+            sudo docker stop "${NAME_WIKI_CONTAINER}" "${NAME_WIKI_MYSQL_CONTAINER}" "${NAME_LDAP_CONTAINER}"
+            sudo docker rm -v "${NAME_WIKI_CONTAINER}" "${NAME_WIKI_MYSQL_CONTAINER}" "${NAME_LDAP_CONTAINER}"
             ;;
 
         phpmyadmin)

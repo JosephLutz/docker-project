@@ -3,7 +3,6 @@ source config.sh
 set -e
 
 ALL_SERVICES=( \
-    htpasswd \
     openssl \
     ldap \
     svn \
@@ -12,6 +11,7 @@ ALL_SERVICES=( \
     phpmyadmin \
     djangp \
     )
+#    htpasswd \
 
 create_data_volume() {
     local datavolume_name
