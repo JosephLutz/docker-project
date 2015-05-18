@@ -1,5 +1,5 @@
 #
-# WebSVN Docker container
+# SVN Docker container
 #
 # Version 0.1
 
@@ -25,6 +25,8 @@ COPY \
   config/000-svn.conf \
   config/000-websvn.conf \
     /etc/apache2/sites-available/
+COPY config/ldap.conf \
+        /etc/apache2/mods-available/
 COPY \
   config/config.php \
     /etc/websvn/

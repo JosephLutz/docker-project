@@ -27,11 +27,11 @@ CustomLog /proc/self/fd/1 combined
 EOF
 
 sed -ie 's|^CustomLog.*|CustomLog /proc/self/fd/1 combined|' /etc/apache2/conf-available/other-vhosts-access-log.conf
-rm -f /etc/apache2/mods-available/ssl.confe
+rm -f /etc/apache2/conf-available/other-vhosts-access-log.confe
 
 # set the SSLSessionCache directory
 sed -ie 's/\$[{]APACHE_RUN_DIR[}]/\/var\/run\/apache2/' /etc/apache2/mods-available/ssl.conf
-rm -f /etc/apache2/conf-available/other-vhosts-access-log.confe
+rm -f /etc/apache2/mods-available/ssl.confe
 
 # configure SVN_BASE_DIR for the WebSVN configuration
 sed -ie 's|SVN_BASE_DIR|'${SVN_BASE_DIR}'|' \
@@ -46,7 +46,12 @@ echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf
 a2enconf servername.conf
 
 # enable modules
-a2enmod ssl dav dav_svn authnz_ldap
+a2enmod \
+  authnz_ldap \
+  dav \
+  dav_svn \
+  ldap \
+  ssl
 
 # Enable the site
 a2ensite \

@@ -36,11 +36,24 @@ case ${1} in
     DAV svn
     SVNPath ${SVN_BASE_DIR}/${repo_name}
     AuthType Basic
+    AuthBasicProvider ldap
     AuthName "svn repository"
-    AuthUserFile /etc/htpasswd/svn.passwd
+    AuthLDAPURL "ldap://ldap/ou=user,dc=novatech?uid?sub?(objectClass=Person)"
+    AuthLDAPBindAuthoritative off
+    AuthLDAPSearchAsUser on
+    AuthLDAPCompareAsUser on
+    AuthLDAPBindDN cn=apache,dc=novatech
+    AuthLDAPBindPassword novatech
+    AuthLDAPGroupAttribute memberUid
+    AuthLDAPGroupAttributeIsDN off
     <RequireAll>
         Require valid-user
         Require ssl
+        Require ip 172.16.0.0/16 192.168.0.0/16
+        <RequireAny>
+            Require ldap-group cn=%{SERVER_NAME},ou=group,dc=novatech
+            Require ldap-group cn=${repo_name},cn=%{SERVER_NAME},ou=group,dc=novatech
+        </RequireAny>
     </RequireAll>
 </Location>
 EOF
