@@ -15,12 +15,16 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN rm -rf /var/www/html/{LocalSettings.php,images} && \
-	ln -st /var/www/html/ \
-		/var/www-shared/html/LocalSettings.php \
-		/var/www-shared/html/images
+    ln -st /var/www/html/ \
+        /var/www-shared/html/LocalSettings.php \
+        /var/www-shared/html/images
 
-# wget https://extdist.wmflabs.org/dist/extensions/LdapAuthentication-REL1_24-24a399e.tar.gz
-# tar -xzf LdapAuthentication-REL1_24-24a399e.tar.gz -C /var/www/mediawiki/extensions
+# install the  LDAP Authentication Extension: http://www.mediawiki.org/wiki/Extension:LDAP_Authentication
+RUN curl https://extdist.wmflabs.org/dist/extensions/LdapAuthentication-REL1_24-24a399e.tar.gz | \
+    tar -xzC /var/www/html/extensions/
+# install the UserMerge Extension: http://www.mediawiki.org/wiki/Extension:UserMerge
+RUN curl https://extdist.wmflabs.org/dist/extensions/UserMerge-REL1_24-3a8651b.tar.gz | \
+    tar -xzC /var/www/html/extensions/
 
 # specify the volumes directly related to this image
 VOLUME ["/var/www-shared/html"]
