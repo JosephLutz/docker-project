@@ -42,7 +42,7 @@ case ${1} in
     AuthLDAPBindAuthoritative off
     AuthLDAPSearchAsUser on
     AuthLDAPCompareAsUser on
-    AuthLDAPBindDN cn=apache,dc=novatech
+    AuthLDAPBindDN cn=proxyagent,dc=novatech
     AuthLDAPBindPassword novatech
     AuthLDAPGroupAttribute memberUid
     AuthLDAPGroupAttributeIsDN off
