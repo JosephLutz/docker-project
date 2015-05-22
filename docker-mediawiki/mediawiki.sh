@@ -60,7 +60,7 @@ sudo docker inspect ${NAME_WIKI_MYSQL_CONTAINER} > /dev/null
 sudo docker inspect ${NAME_WIKI_DV} > /dev/null
 sudo docker inspect ${NAME_WIKI_MYSQL_DV} > /dev/null
 
-printf 'Waiting for MySQL database to finish starting up.\n'
+echo 'Waiting for MySQL database to finish starting up.'
 while ! \
     echo "SHOW GLOBAL STATUS;" | \
     sudo docker exec -i \
@@ -216,10 +216,17 @@ case ${1} in
         # convert database to latest version for mediawiki
         if [[ "${convert}" == "TRUE" ]]
         then
-            sleep 10 # This is just wrong. but aparently the file dose not exist after the containger has been started
+            echo 'Waiting for mediwiki to finish starting up.'
+            while ! \
+                sudo docker exec -i \
+                  "${NAME_WIKI_CONTAINER}" \
+                  ls /var/www/html/maintenance/update.php &> /dev/null
+            do
+              sleep 1
+            done
             echo "Converting the mediawiki database to latest"
             sudo docker exec -i \
-              ${NAME_WIKI_CONTAINER} \
+              "${NAME_WIKI_CONTAINER}" \
               /usr/local/bin/php \
                 /var/www/html/maintenance/update.php \
                 --quick
