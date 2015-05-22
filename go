@@ -70,6 +70,7 @@ do
             ./go.build.images.sh ${NAME_WIKI_IMAGE}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
+            ./go.start.sh  "${service_name}"
             ;;
 
         phpmyadmin)

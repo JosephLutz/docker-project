@@ -80,8 +80,8 @@ do
             ./go.start.sh ldap
             ./go.start.sh ${service_name}
             ./docker-mediawiki/mediawiki.sh restore
-            sudo docker stop "${NAME_WIKI_CONTAINER}" "${NAME_WIKI_MYSQL_CONTAINER}" "${NAME_LDAP_CONTAINER}"
-            sudo docker rm -v "${NAME_WIKI_CONTAINER}" "${NAME_WIKI_MYSQL_CONTAINER}" "${NAME_LDAP_CONTAINER}"
+            sudo docker stop "${NAME_WIKI_CONTAINER}" "${NAME_WIKI_MYSQL_CONTAINER}"
+            sudo docker rm -v "${NAME_WIKI_CONTAINER}" "${NAME_WIKI_MYSQL_CONTAINER}"
             ;;
 
         phpmyadmin)

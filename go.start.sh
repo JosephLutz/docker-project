@@ -4,12 +4,12 @@ set -e
 
 ALL_SERVICES=( \
     ldap \
+    phpldapadmin \
     svn \
     git \
     wiki \
     phpmyadmin \
     djangp \
-    phpldapadmin \
     )
 
 check_volumes() {
@@ -17,10 +17,8 @@ check_volumes() {
     datavolume_name=${1}
     servicee_name=${2}
     sudo true
-    if sudo docker inspect "${datavolume_name}" &> /dev/null
+    if ! sudo docker inspect "${datavolume_name}" &> /dev/null
     then
-        true
-    else
         ./go ${servicee_name}
     fi
 }
@@ -124,6 +122,7 @@ do
                 --volumes-from "${NAME_OPENSSL_DV}" \
                 --link ${NAME_WIKI_MYSQL_CONTAINER}:mysql \
                 --link ${NAME_LDAP_CONTAINER}:ldap \
+-v ${HOST_MEDIAWIKI_BACKUP_DIR}:/tmp/import_export \
                 ${NAME_WIKI_IMAGE}:${TAG}
             ;;
 
