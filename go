@@ -7,11 +7,12 @@ ALL_SERVICES=( \
     openssl \
     ldap \
     svn \
-    git \
+    gitlab \
     wiki \
     phpmyadmin \
     djangp \
     )
+#    git \
 #    htpasswd \
 
 services=( ${@} )
@@ -61,6 +62,13 @@ do
 
         git)
             ./go.build.images.sh ${NAME_GIT_IMAGE}
+            ./go.create.volumes.sh "${service_name}"
+            ./go.populate.volumes.sh "${service_name}"
+            ./go.start.sh  "${service_name}"
+            ;;
+
+        gitlab)
+            ./go.build.images.sh ${NAME_GITLAB_IMAGE}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"

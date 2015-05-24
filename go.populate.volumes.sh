@@ -6,11 +6,12 @@ ALL_SERVICES=( \
     openssl \
     ldap \
     svn \
-    git \
+    gitlab \
     wiki \
     phpmyadmin \
     djangp \
     )
+#    git \
 #    htpasswd \
 
 services=( ${@} )
@@ -74,6 +75,45 @@ do
                 --volumes-from "${NAME_GIT_REPO_DV}" \
                 -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export \
                 ${NAME_GIT_IMAGE}:${TAG} restore ${FILES_TO_RESTORE[*]}
+            ;;
+
+        gitlab)
+            # postgres database
+            if sudo docker inspect "${NAME_GITLAB_POSTGRES_CONTAINER}_populate" &> /dev/null
+            then
+                if sudo docker inspect "${NAME_GITLAB_POSTGRES_CONTAINER}_populate" | grep -q '"Running": true,'
+                then
+                    printf "Stopping : "
+                    sudo docker stop "${NAME_GITLAB_POSTGRES_CONTAINER}_populate"
+                fi
+                printf "Rremoving : "
+                sudo docker rm -v "${NAME_GITLAB_POSTGRES_CONTAINER}_populate"
+            fi
+            sudo docker run -d --name "${NAME_GITLAB_POSTGRES_CONTAINER}_populate" \
+                --volumes-from "${NAME_GITLAB_POSTGRES_DV}" \
+                -v $(pwd)/$(get_docker_dir ${NAME_GITLAB_IMAGE})/postgres/:/docker-entrypoint-initdb.d/ \
+                --env='POSTGRES_DB=gitlabhq_production' \
+                -e POSTGRES_USER="${GITLAB_POSTGRES_USER}" \
+                -e POSTGRES_PASSWORD="${GITLAB_POSTGRES_PASSWORD}" \
+                postgres:${TAG}
+            printf 'Waiting for postgresql database to finish starting up.\n'
+            while ! \
+                sudo docker exec -i \
+                    "${NAME_GITLAB_POSTGRES_CONTAINER}_populate" \
+                        su postgres -c "psql -l" 2>&1 | \
+                    grep -q '^ gitlabhq_production\b' &> /dev/null
+            do
+                sleep 1
+            done
+            printf "Stopping : "
+            sudo docker stop "${NAME_GITLAB_POSTGRES_CONTAINER}_populate"
+            printf "Rremoving : "
+            sudo docker rm -v "${NAME_GITLAB_POSTGRES_CONTAINER}_populate"
+            # gitlab repositories
+#            sudo docker run -ti --rm \
+#                --volumes-from "${NAME_GITLAB_REPO_DV}" \
+#                -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export \
+#                ${NAME_GIT_IMAGE}:${TAG} true
             ;;
 
         wiki)

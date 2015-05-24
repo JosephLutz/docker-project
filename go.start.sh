@@ -6,11 +6,12 @@ ALL_SERVICES=( \
     ldap \
     phpldapadmin \
     svn \
-    git \
+    gitlab \
     wiki \
     phpmyadmin \
     djangp \
     )
+#    git \
 
 check_volumes() {
     local container_name
@@ -95,6 +96,35 @@ do
                 -e GIT_HOSTNAME="${GIT_HOSTNAME}" \
                 --link ${NAME_LDAP_CONTAINER}:ldap \
                 ${NAME_GIT_IMAGE}:${TAG}
+            ;;
+
+        gitlab)
+            check_volumes "${NAME_OPENSSL_DV}" openssl
+            check_volumes "${NAME_LDAP_CONTAINER}" ldap
+            stop_and_remove "${NAME_GITLAB_CONTAINER}"
+            stop_and_remove "${NAME_GITLAB_POSTGRES_CONTAINER}"
+            stop_and_remove "${NAME_GITLAB_REDIS_CONTAINER}"
+            printf 'Starting :'
+            # start redis directory
+            sudo docker run -d --name "${NAME_GITLAB_REDIS_CONTAINER}" \
+                --restart=always \
+                redis:${TAG}
+            # start postgres database
+            sudo docker run -d --name "${NAME_GITLAB_POSTGRES_CONTAINER}" \
+                --restart=always \
+                --volumes-from "${NAME_GITLAB_POSTGRES_DV}" \
+                postgres:${TAG}
+            # start gitlab
+#            sudo docker run -d --name "${NAME_GITLAB_CONTAINER}" \
+#                --restart=always \
+#                -P -p ${GITLAB}:443 -p ${GITLAB_OPEN}:80 \
+#                --volumes-from "${NAME_OPENSSL_DV}" \
+#                --volumes-from "${NAME_GITLAB_REPO_DV}" \
+#                -e GITLAB_HOSTNAME="${GITLAB_HOSTNAME}" \
+#                --link ${NAME_LDAP_CONTAINER}:ldap \
+#                --link ${NAME_GITLAB_REDIS_CONTAINER}:redis \
+#                --link ${NAME_GITLAB_POSTGRES_CONTAINER}:postgres \
+#                ${NAME_GIT_IMAGE}:${TAG}
             ;;
 
         wiki)
