@@ -36,7 +36,8 @@ CONTAINER_ENDING=""
 }
 
 { # variables for gitLab
-  NAME_GITLAB_IMAGE="novatechweb/gitlab"
+  NAME_GITLAB_IMAGE="sameersbn/gitlab"
+  NAME_GITLAB_DV_IMAGE="novatechweb/gitlab"
   NAME_GITLAB_CONTAINER="gitlab${CONTAINER_ENDING}"
   NAME_GITLAB_POSTGRES_CONTAINER="gitlab_postgres${CONTAINER_ENDING}"
   NAME_GITLAB_REDIS_CONTAINER="gitlab_redis${CONTAINER_ENDING}"
@@ -45,6 +46,7 @@ CONTAINER_ENDING=""
   GITLAB_HOSTNAME=git.novatech-llc.com
   GITLAB=172.16.0.102:443
   GITLAB_OPEN=172.16.0.102:80
+  GITLAB_SSH=172.16.0.102:2200
   HOST_GIT_BACKUP_DIR=${BACKUP_DIR}/GIT
 
   GITLAB_POSTGRES_USER=novatech
@@ -112,6 +114,7 @@ ALL_IMAGES=( \
     ${NAME_SVN_IMAGE} \
     ${NAME_GIT_IMAGE} \
     ${NAME_GITLAB_IMAGE} \
+    ${NAME_GITLAB_DV_IMAGE} \
     )
 #    ${NAME_DJANGO_IMAGE} \
 #    ${NAME_HTPASSWD_IMAGE} \
@@ -124,7 +127,8 @@ get_docker_dir() {
         ${NAME_WIKI_IMAGE}) echo 'docker-mediawiki';;
         ${NAME_SVN_IMAGE}) echo 'docker-svn';;
         ${NAME_GIT_IMAGE}) echo 'docker-git';;
-        ${NAME_GITLAB_IMAGE}) echo 'docker-gitlab';;
+        ${NAME_GITLAB_IMAGE}) echo '';;
+        ${NAME_GITLAB_DV_IMAGE}) echo 'docker-gitlab';;
         ${NAME_DJANGO_IMAGE}) echo 'docker-django';;
     esac
 }
