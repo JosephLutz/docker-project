@@ -37,7 +37,7 @@ images_to_build=( ${@} )
 for image_name in ${images_to_build[*]}
 do
     case ${image_name} in
-#        "${NAME_GITLAB_IMAGE}" | \
+        "${NAME_GITLAB_DV_IMAGE}" | \
         "${NAME_HTPASSWD_IMAGE}" | \
         "${NAME_OPENSSL_IMAGE}" | \
         "${NAME_LDAP_IMAGE}" | \

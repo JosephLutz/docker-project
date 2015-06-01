@@ -109,11 +109,6 @@ do
             sudo docker stop "${NAME_GITLAB_POSTGRES_CONTAINER}_populate"
             printf "Rremoving : "
             sudo docker rm -v "${NAME_GITLAB_POSTGRES_CONTAINER}_populate"
-            # gitlab repositories
-#            sudo docker run -ti --rm \
-#                --volumes-from "${NAME_GITLAB_REPO_DV}" \
-#                -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export \
-#                ${NAME_GIT_IMAGE}:${TAG} true
             ;;
 
         wiki)

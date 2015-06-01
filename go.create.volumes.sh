@@ -38,7 +38,7 @@ do
         ldap)       create_data_volume "${NAME_LDAP_DV}" "${NAME_LDAP_IMAGE}";;
         svn)        create_data_volume "${NAME_SVN_REPO_DV}" "${NAME_SVN_IMAGE}";;
         git)        create_data_volume "${NAME_GIT_REPO_DV}" "${NAME_GIT_IMAGE}";;
-        gitlab)     create_data_volume "${NAME_GITLAB_REPO_DV}" "${NAME_GITLAB_IMAGE}"
+        gitlab)     create_data_volume "${NAME_GITLAB_REPO_DV}" "${NAME_GITLAB_DV_IMAGE}"
                     create_data_volume "${NAME_GITLAB_POSTGRES_DV}" "postgres"
                     ;;
         wiki)       create_data_volume "${NAME_WIKI_MYSQL_DV}" "mysql"

@@ -34,7 +34,7 @@ stop_and_remove() {
         sleep 1 ; printf '.'
         sleep 1 ; printf '.'
         sleep 1 ; printf '.'
-        sleep 1 ; printf '.\n'
+        sleep 1 ; printf '\n'
         if sudo docker inspect "${container_name}" | grep -q '"Running": true,'
         then
             printf 'Stopping container : '
@@ -58,7 +58,8 @@ do
         ldap)
             check_volumes "${NAME_OPENSSL_DV}" openssl
             stop_and_remove "${NAME_LDAP_CONTAINER}"
-            printf 'Starting :'
+            echo 'Starting :'
+            printf "    ${NAME_LDAP_CONTAINER} : "
             sudo docker run -d --name "${NAME_LDAP_CONTAINER}" \
                 --restart=always \
                 --volumes-from "${NAME_OPENSSL_DV}" \
@@ -72,7 +73,8 @@ do
             check_volumes "${NAME_OPENSSL_DV}" openssl
             check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_SVN_CONTAINER}"
-            printf 'Starting :'
+            echo 'Starting :'
+            printf "    ${NAME_SVN_CONTAINER} : "
             sudo docker run -d --name "${NAME_SVN_CONTAINER}" \
                 --restart=always \
                 -P -p ${SVN}:443 -p ${SVN_OPEN}:80 \
@@ -87,7 +89,8 @@ do
             check_volumes "${NAME_OPENSSL_DV}" openssl
             check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_GIT_CONTAINER}"
-            printf 'Starting :'
+            echo 'Starting :'
+            printf "    ${NAME_GIT_CONTAINER} : "
             sudo docker run -d --name "${NAME_GIT_CONTAINER}" \
                 --restart=always \
                 -P -p ${GIT}:443 -p ${GIT_OPEN}:80 \
@@ -104,27 +107,34 @@ do
             stop_and_remove "${NAME_GITLAB_CONTAINER}"
             stop_and_remove "${NAME_GITLAB_POSTGRES_CONTAINER}"
             stop_and_remove "${NAME_GITLAB_REDIS_CONTAINER}"
-            printf 'Starting :'
+            echo 'Starting :'
+            printf "    ${NAME_GITLAB_REDIS_CONTAINER} : "
             # start redis directory
             sudo docker run -d --name "${NAME_GITLAB_REDIS_CONTAINER}" \
                 --restart=always \
                 redis:${TAG}
             # start postgres database
+            printf "    ${NAME_GITLAB_POSTGRES_CONTAINER} : "
             sudo docker run -d --name "${NAME_GITLAB_POSTGRES_CONTAINER}" \
                 --restart=always \
                 --volumes-from "${NAME_GITLAB_POSTGRES_DV}" \
                 postgres:${TAG}
             # start gitlab
-#            sudo docker run -d --name "${NAME_GITLAB_CONTAINER}" \
-#                --restart=always \
-#                -P -p ${GITLAB}:443 -p ${GITLAB_OPEN}:80 \
-#                --volumes-from "${NAME_OPENSSL_DV}" \
-#                --volumes-from "${NAME_GITLAB_REPO_DV}" \
-#                -e GITLAB_HOSTNAME="${GITLAB_HOSTNAME}" \
-#                --link ${NAME_LDAP_CONTAINER}:ldap \
-#                --link ${NAME_GITLAB_REDIS_CONTAINER}:redis \
-#                --link ${NAME_GITLAB_POSTGRES_CONTAINER}:postgres \
-#                ${NAME_GIT_IMAGE}:${TAG}
+            printf "    ${NAME_GITLAB_CONTAINER} : "
+            sudo docker run -d --name "${NAME_GITLAB_CONTAINER}" \
+                --restart=always \
+                -P -p ${GITLAB}:443 -p ${GITLAB_OPEN}:80 -p ${GITLAB_SSH}:22 \
+                --volumes-from "${NAME_OPENSSL_DV}" \
+                --volumes-from "${NAME_GITLAB_REPO_DV}" \
+                --env-file=./gitlab.env.list \
+                --env="GITLAB_HOST=${GITLAB_HOSTNAME}" \
+                --env="GITLAB_SSH_HOST=${GITLAB_HOSTNAME}" \
+                --env="DB_USER=${GITLAB_POSTGRES_USER}" \
+                --env="DB_PASS=${GITLAB_POSTGRES_PASSWORD}" \
+                --link ${NAME_LDAP_CONTAINER}:gitlab-ldap \
+                --link ${NAME_GITLAB_REDIS_CONTAINER}:gitlab-redis \
+                --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
+                ${NAME_GITLAB_IMAGE}:${TAG}
             ;;
 
         wiki)
@@ -132,7 +142,8 @@ do
             check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_WIKI_MYSQL_CONTAINER}"
             stop_and_remove "${NAME_WIKI_CONTAINER}"
-            printf 'Starting :'
+            echo 'Starting :'
+            printf "    ${NAME_WIKI_MYSQL_CONTAINER} : "
             sudo docker run -d --name "${NAME_WIKI_MYSQL_CONTAINER}" \
                 --restart=always \
                 -e MYSQL_ROOT_PASSWORD="${WIKI_MYSQL_PASSWORD}" \
@@ -141,6 +152,7 @@ do
                 -e MYSQL_PASSWORD="${MEDIAWIKI_PASSWORD}" \
                 --volumes-from "${NAME_WIKI_MYSQL_DV}" \
                 mysql:${TAG}
+            printf "    ${NAME_WIKI_CONTAINER} : "
             sudo docker run -d --name "${NAME_WIKI_CONTAINER}" \
                 --restart=always \
                 -P -p ${MEDIAWIKI}:443 -p ${MEDIAWIKI_OPEN}:80 \
@@ -159,13 +171,15 @@ do
         phpmyadmin)
             stop_and_remove "${NAME_PHPMYADMIN_MYSQL_CONTAINER}"
             stop_and_remove "${NAME_PHPMYADMIN_CONTAINER}"
-            printf 'Starting :'
+            echo 'Starting :'
+            printf "    ${NAME_PHPMYADMIN_MYSQL_CONTAINER} : "
             sudo docker run -d --name "${NAME_PHPMYADMIN_MYSQL_CONTAINER}" \
                 --restart=always \
                 -e MYSQL_ROOT_PASSWORD="${PHPMYADMIN_MYSQL_PASSWORD}" \
                 --volumes-from "${NAME_PHPMYADMIN_MYSQL_DV}" \
                 mysql:${TAG}
             sudo docker inspect "${NAME_WIKI_MYSQL_CONTAINER}" > /dev/null
+            printf "    ${NAME_PHPMYADMIN_CONTAINER} : "
             sudo docker run -d --name "${NAME_PHPMYADMIN_CONTAINER}" \
                 --link ${NAME_PHPMYADMIN_MYSQL_CONTAINER}:mysql \
                 --link ${NAME_WIKI_MYSQL_CONTAINER}:wiki_mysql \
@@ -184,7 +198,8 @@ do
             check_volumes "${NAME_OPENSSL_DV}" openssl
             check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_DJANGO_CONTAINER}"
-            printf 'Starting :'
+            echo 'Starting :'
+            printf "    ${NAME_DJANGO_CONTAINER} : "
 #            sudo docker run -d --name "${NAME_DJANGO_CONTAINER}" \
 #                --restart=always \
 #                -P -p ${DJANGO_SECURE}:443 -p ${DJANGO}:80 \
@@ -199,6 +214,8 @@ do
         phpldapadmin)
             check_volumes "${NAME_LDAP_CONTAINER}" ldap
             stop_and_remove "${NAME_PHPLDAPADMIN}"
+            echo 'Starting :'
+            printf "    ${NAME_PHPLDAPADMIN} : "
             sudo docker run -d --name "${NAME_PHPLDAPADMIN}" \
                 --restart=always \
                 -P -p ${PHPLDAPADMIN_OPEN}:80 -p ${PHPLDAPADMIN}:443 \
