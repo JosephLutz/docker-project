@@ -164,8 +164,8 @@ do
                 --volumes-from "${NAME_OPENSSL_DV}" \
                 --link ${NAME_WIKI_MYSQL_CONTAINER}:mysql \
                 --link ${NAME_LDAP_CONTAINER}:ldap \
--v ${HOST_MEDIAWIKI_BACKUP_DIR}:/tmp/import_export \
                 ${NAME_WIKI_IMAGE}:${TAG}
+#-v ${HOST_MEDIAWIKI_BACKUP_DIR}:/tmp/import_export \
             ;;
 
         phpmyadmin)
