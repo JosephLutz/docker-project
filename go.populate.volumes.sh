@@ -96,15 +96,17 @@ do
                 -e POSTGRES_USER="${GITLAB_POSTGRES_USER}" \
                 -e POSTGRES_PASSWORD="${GITLAB_POSTGRES_PASSWORD}" \
                 postgres:${TAG}
-            printf 'Waiting for postgresql database to finish starting up.\n'
+            printf 'Waiting for postgresql database to finish starting up.  '
             while ! \
-                sudo docker exec -i \
+                sudo docker exec \
                     "${NAME_GITLAB_POSTGRES_CONTAINER}_populate" \
                         su postgres -c "psql -l" 2>&1 | \
                     grep -q '^ gitlabhq_production\b' &> /dev/null
             do
                 sleep 1
+                printf '.'
             done
+            printf '\n'
             printf "Stopping : "
             sudo docker stop "${NAME_GITLAB_POSTGRES_CONTAINER}_populate"
             printf "Rremoving : "
