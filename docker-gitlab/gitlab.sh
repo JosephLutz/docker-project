@@ -48,16 +48,15 @@ case ${1} in
         NAMESPACE="root"
         [[ ! -z "${2}" ]] && NAMESPACE=${2}
         # copy repositoris into the data container
-        sudo docker run --name=gitlab_UTILITY -it --rm \
+        sudo docker run --name=gitlab_UTILITY --rm \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
-            -v ${HOST_GIT_BACKUP_DIR}/repositories:/home/git/repositories/ \
+            -v ${HOST_GIT_BACKUP_DIR}/repositories:/home/git/import/ \
             --entrypoint="/bin/bash" \
             ${NAME_GITLAB_IMAGE}:${TAG} \
-                -c "cp -r /home/git/data/backups/* /home/git/data/repositories/${NAMESPACE}/"
+                -c "cp -r /home/git/import/*.git /home/git/data/repositories/${NAMESPACE}/"
         # import the repositories into gitlab
         sudo docker run --name=gitlab_UTILITY -it --rm \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
-            -v ${HOST_GIT_BACKUP_DIR}/repositories:/home/git/repositories \
             --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
             --link ${NAME_GITLAB_REDIS_CONTAINER}:gitlab-redis \
             --env-file=./gitlab.env.list \
