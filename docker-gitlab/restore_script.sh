@@ -5,8 +5,8 @@ set -e
 
 rm -f /home/git/data/backups/*_gitlab_backup.tar
 
-sudo -u git -H bundle exec rake gitlab:backup:restore force=yes BACKUP=${BACKUP_TIMESTAMP} RAILS_ENV=production
+cp --verbose /tmp/import_export/${BACKUP_TIMESTAMP}_gitlab_backup.tar /home/git/data/backups/
 
-cp --verbose /home/git/data/backups/*_gitlab_backup.tar /tmp/import_export/
+sudo -u git -H bundle exec rake gitlab:backup:restore force=yes BACKUP=${BACKUP_TIMESTAMP} RAILS_ENV=production
 
 rm -f /home/git/data/backups/*_gitlab_backup.tar
