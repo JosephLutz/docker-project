@@ -8,7 +8,7 @@ set -e
     exit 1
 }
 
-#sudo mkdir -p ${HOST_GIT_BACKUP_DIR}/backups ${HOST_GIT_BACKUP_DIR}/repositories
+sudo mkdir -p ${HOST_GIT_BACKUP_DIR}/backups
 
 case ${1} in
     backup)
@@ -57,6 +57,10 @@ case ${1} in
         #     https://github.com/gitlabhq/gitlabhq/wiki/Import-existing-repositories-into-GitLab
         namespace="root"
         [[ ! -z "${2}" ]] && namespace=${2}
+        [[ ! -d "${HOST_GIT_BACKUP_DIR}/repositories" ]] && {
+            echo "Repository archives do not exist."
+            exit 1
+        }
         sudo docker inspect "${datavolume_name}" &> /dev/null || \
             docker stop "${NAME_GITLAB_CONTAINER}"
         sudo cp ./$(get_docker_dir ${NAME_GITLAB_DV_IMAGE})/import_script.sh ${HOST_GIT_BACKUP_DIR}/repositories/
