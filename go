@@ -68,7 +68,7 @@ do
             ;;
 
         gitlab)
-            ./go.build.images.sh ${NAME_GITLAB_IMAGE}
+            ./go.build.images.sh ${NAME_GITLAB_DV_IMAGE}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"
