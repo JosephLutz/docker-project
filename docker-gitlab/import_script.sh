@@ -30,6 +30,7 @@ appSanitize () {
 for archive_file in $(ls -1 /tmp/import_export/*.git*tar.gz)
 do
     repository=$(basename ${archive_file} | sed 's|\.git\..*|.git|')
+    rm -rf /home/git/data/repositories/${NAMESPACE}/${repository}/
     mkdir /home/git/data/repositories/${NAMESPACE}/${repository}/
     /bin/tar \
         --extract \
