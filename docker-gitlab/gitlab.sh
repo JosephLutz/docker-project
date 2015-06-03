@@ -8,23 +8,34 @@ set -e
     exit 1
 }
 
-sudo mkdir -p ${HOST_GIT_BACKUP_DIR}/backups ${HOST_GIT_BACKUP_DIR}/repositories
+#sudo mkdir -p ${HOST_GIT_BACKUP_DIR}/backups ${HOST_GIT_BACKUP_DIR}/repositories
 
 case ${1} in
     backup)
         # Stop gitlab container
         sudo docker inspect "${datavolume_name}" &> /dev/null || \
             docker stop "${NAME_GITLAB_CONTAINER}"
-        sudo docker run --name=gitlab_UTILITY --rm \
+        # create backup files
+        sudo docker run --name=gitlab_UTILITY --rm -t \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
             --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
             --link ${NAME_GITLAB_REDIS_CONTAINER}:gitlab-redis \
             --env-file=./gitlab.env.list \
             --env="DB_USER=${GITLAB_POSTGRES_USER}" \
             --env="DB_PASS=${GITLAB_POSTGRES_PASSWORD}" \
-            -v ${HOST_GIT_BACKUP_DIR}/backups:/home/git/data/backups \
             ${NAME_GITLAB_IMAGE}:${TAG} \
                 app:rake gitlab:backup:create
+        # move the backup files out of the data container
+        sudo docker run --name=gitlab_UTILITY --rm -t \
+            --volumes-from "${NAME_GITLAB_REPO_DV}" \
+            --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
+            --link ${NAME_GITLAB_REDIS_CONTAINER}:gitlab-redis \
+            --env-file=./gitlab.env.list \
+            --env="DB_USER=${GITLAB_POSTGRES_USER}" \
+            --env="DB_PASS=${GITLAB_POSTGRES_PASSWORD}" \
+            -v ${HOST_GIT_BACKUP_DIR}/backups:/tmp/import_export \
+            ${NAME_GITLAB_IMAGE}:${TAG} \
+                bash -c "/bin/cp --verbose /home/git/data/backups/*_gitlab_backup.tar /tmp/import_export/ ; rm -f /home/git/data/backups/*_gitlab_backup.tar"
         # Start gitlab container
         sudo docker start "${NAME_GITLAB_CONTAINER}"
         ;;
