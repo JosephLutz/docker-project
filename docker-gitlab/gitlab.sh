@@ -10,13 +10,12 @@ set -e
 
 sudo mkdir -p ${HOST_GIT_BACKUP_DIR}/backups ${HOST_GIT_BACKUP_DIR}/repositories
 
-# Stop gitlab container
-sudo docker inspect "${datavolume_name}" &> /dev/null || \
-    docker stop "${NAME_GITLAB_CONTAINER}"
-
 case ${1} in
     backup)
-        sudo docker run --name=gitlab_UTILITY -it --rm \
+        # Stop gitlab container
+        sudo docker inspect "${datavolume_name}" &> /dev/null || \
+            docker stop "${NAME_GITLAB_CONTAINER}"
+        sudo docker run --name=gitlab_UTILITY --rm \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
             --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
             --link ${NAME_GITLAB_REDIS_CONTAINER}:gitlab-redis \
@@ -26,11 +25,16 @@ case ${1} in
             -v ${HOST_GIT_BACKUP_DIR}/backups:/home/git/data/backups \
             ${NAME_GITLAB_IMAGE}:${TAG} \
                 app:rake gitlab:backup:create
+        # Start gitlab container
+        sudo docker start "${NAME_GITLAB_CONTAINER}"
         ;;
 
     restore)
         BACKUP=""
         [[ ! -z "${2}" ]] && BACKUP="BACKUP=${2}"
+        # Stop gitlab container
+        sudo docker inspect "${datavolume_name}" &> /dev/null || \
+            docker stop "${NAME_GITLAB_CONTAINER}"
         sudo docker run --name=gitlab_UTILITY -it --rm \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
             --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
@@ -41,19 +45,33 @@ case ${1} in
             -v ${HOST_GIT_BACKUP_DIR}/backups:/home/git/data/backups \
             ${NAME_GITLAB_IMAGE}:${TAG} \
                 app:rake gitlab:backup:restore force=yes ${BACKUP}
+        # Start gitlab container
+        sudo docker start "${NAME_GITLAB_CONTAINER}"
         ;;
 
     import)
         #     https://github.com/gitlabhq/gitlabhq/wiki/Import-existing-repositories-into-GitLab
-        NAMESPACE="root"
-        [[ ! -z "${2}" ]] && NAMESPACE=${2}
-        # copy repositoris into the data container
+        namespace="root"
+        [[ ! -z "${2}" ]] && namespace=${2}
+        # make script available
+        cp ./$(get_docker_dir ${NAME_GITLAB_DV_IMAGE})/host_import_script.sh ${HOST_GIT_BACKUP_DIR}/repositories/
+        # Stop gitlab container
+        sudo docker inspect "${datavolume_name}" &> /dev/null || \
+            docker stop "${NAME_GITLAB_CONTAINER}"
+        # Extract archived repositories into namespace
         sudo docker run --name=gitlab_UTILITY --rm \
+            -v ${HOST_GIT_BACKUP_DIR}/repositories:/tmp/import_export \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
-            -v ${HOST_GIT_BACKUP_DIR}/repositories:/home/git/import/ \
-            --entrypoint="/bin/bash" \
+            --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
+            --link ${NAME_GITLAB_REDIS_CONTAINER}:gitlab-redis \
+            --env-file=./gitlab.env.list \
+            --env="DB_USER=${GITLAB_POSTGRES_USER}" \
+            --env="DB_PASS=${GITLAB_POSTGRES_PASSWORD}" \
+            --env="NAMESPACE=${namespace}" \
             ${NAME_GITLAB_IMAGE}:${TAG} \
-                -c "cp -r /home/git/import/*.git /home/git/data/repositories/${NAMESPACE}/"
+                /tmp/import_export/host_import_script.sh
+        # remove ${HOST_GIT_BACKUP_DIR}/repositories/host_import_script.sh
+        rm ${HOST_GIT_BACKUP_DIR}/repositories/host_import_script.sh
         # import the repositories into gitlab
         sudo docker run --name=gitlab_UTILITY -it --rm \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
@@ -64,6 +82,8 @@ case ${1} in
             --env="DB_PASS=${GITLAB_POSTGRES_PASSWORD}" \
             ${NAME_GITLAB_IMAGE}:${TAG} \
                 app:rake gitlab:import:repos RAILS_ENV=production
+        # Start gitlab container
+        sudo docker start "${NAME_GITLAB_CONTAINER}"
         ;;
 
     *)
@@ -83,6 +103,3 @@ case ${1} in
         exit 0
         ;;
 esac
-
-# Start gitlab container
-sudo docker start "${NAME_GITLAB_CONTAINER}"
