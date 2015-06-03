@@ -10,7 +10,7 @@ ALL_SERVICES=( \
     gitlab \
     wiki \
     phpmyadmin \
-    djangp \
+    django \
     )
 #    git \
 #    htpasswd \
@@ -87,7 +87,7 @@ do
             ./go.start.sh  "${service_name}"
             ;;
 
-        djangp)
+        django)
             ./go.build.images.sh ${NAME_DJANGO_IMAGE}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"

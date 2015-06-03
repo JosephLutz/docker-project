@@ -9,7 +9,7 @@ ALL_SERVICES=( \
     gitlab \
     wiki \
     phpmyadmin \
-    djangp \
+    django \
     )
 #    git \
 #    htpasswd \
@@ -126,7 +126,7 @@ do
 #            ./
             ;;
 
-        djangp)
+        django)
             ;;
 
         *)

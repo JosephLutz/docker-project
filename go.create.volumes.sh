@@ -9,7 +9,7 @@ ALL_SERVICES=( \
     gitlab \
     wiki \
     phpmyadmin \
-    djangp \
+    django \
     )
 #    git \
 #    htpasswd \
@@ -45,7 +45,7 @@ do
                     create_data_volume "${NAME_WIKI_DV}" "${NAME_WIKI_IMAGE}"
                     ;;
         phpmyadmin) create_data_volume "${NAME_PHPMYADMIN_MYSQL_DV}" "mysql";;
-        djangp)     ;;
+        django)     ;;
         *)
             printf 'Available services:\n'
             for service_name in ${ALL_SERVICES[*]}
