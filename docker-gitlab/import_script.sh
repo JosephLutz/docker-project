@@ -14,7 +14,6 @@ do
         --group=${USERMAP_GID} \
         --directory=/home/git/data/repositories/${NAMESPACE}/${repository}/ \
         -f ${archive_file}
-    /bin/rm -f ${archive_file}
 done
 
 appSanitize
