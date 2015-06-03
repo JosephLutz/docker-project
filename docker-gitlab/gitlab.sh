@@ -36,6 +36,7 @@ case ${1} in
             do
                 echo " - ${i}"
             done
+            exit 1
         }
         [[ ! -f "${HOST_GIT_BACKUP_DIR}/${timestamp}_gitlab_backup.tar" ]] && {
             printf "Could not locate backup archive file: \n    ${HOST_GIT_BACKUP_DIR}/${timestamp}_gitlab_backup.tar\n"
@@ -45,8 +46,8 @@ case ${1} in
             docker stop "${NAME_GITLAB_CONTAINER}"
         sudo cp ./$(get_docker_dir ${NAME_GITLAB_DV_IMAGE})/backup_script.sh ${HOST_GIT_BACKUP_DIR}/
         sudo docker run --name=gitlab_UTILITY -it --rm \
-            -v ${HOST_GIT_BACKUP_DIR}/:/tmp/import_export \
-            --env="BACKUP_TIMESTAMP=${timestamp}"
+            -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export \
+            --env="BACKUP_TIMESTAMP=${timestamp}" \
             --volumes-from "${NAME_GITLAB_REPO_DV}" \
             --link ${NAME_GITLAB_POSTGRES_CONTAINER}:gitlab-db \
             --link ${NAME_GITLAB_REDIS_CONTAINER}:gitlab-redis \
