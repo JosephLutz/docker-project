@@ -3,6 +3,8 @@
 
 set -e
 
+GITLAB_DATA_DIR="/home/git/data"
+
 # this function comes from /app/init
 appSanitize () {
   echo "Checking repository directories permissions..."
