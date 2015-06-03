@@ -32,6 +32,7 @@ do
     repository=$(basename ${archive_file} | sed 's|\.git\..*|.git|')
     rm -rf /home/git/data/repositories/${NAMESPACE}/${repository}/
     mkdir /home/git/data/repositories/${NAMESPACE}/${repository}/
+    chown git:git /home/git/data/repositories/${NAMESPACE}/${repository}/
     /bin/tar \
         --extract \
         --numeric-owner \

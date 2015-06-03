@@ -44,7 +44,7 @@ case ${1} in
         }
         sudo docker inspect "${datavolume_name}" &> /dev/null || \
             docker stop "${NAME_GITLAB_CONTAINER}"
-        sudo cp ./$(get_docker_dir ${NAME_GITLAB_DV_IMAGE})/backup_script.sh ${HOST_GIT_BACKUP_DIR}/
+        sudo cp ./$(get_docker_dir ${NAME_GITLAB_DV_IMAGE})/restore_script.sh ${HOST_GIT_BACKUP_DIR}/
         sudo docker run --name=gitlab_UTILITY -it --rm \
             -v ${HOST_GIT_BACKUP_DIR}:/tmp/import_export \
             --env="BACKUP_TIMESTAMP=${timestamp}" \
