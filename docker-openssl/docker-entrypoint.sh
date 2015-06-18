@@ -51,7 +51,8 @@ case ${1} in
                 -out ${SSL_BASE_DIR}/private/${base_filename}.crt \
                 -subj ${SUBJ}
         done
-        touch ${SSL_BASE_DIR}/private/${base_filename}_bundle.crt
+        cp ${SSL_BASE_DIR}/private/${base_filename}.crt ${SSL_BASE_DIR}/private/${base_filename}_bundle.crt
+        mkdir -p /etc/grid-security/certificates
         update-ca-certificates --fresh
         ;;
 
