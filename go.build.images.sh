@@ -7,16 +7,16 @@ move_latest_to_tag() {
     image_name=${1}
     sudo true
     sudo docker inspect "${image_name}:latest" &> /dev/null
-    if sudo docker inspect "docker.io/${image_name}:${TAG}" &> /dev/null
+    if sudo docker inspect "docker.io/${image_name}:${DOCKER_IMAGE_TAG}" &> /dev/null
     then
         # This is to get around the Issue with the CentOS changes to the Docker package
-        sudo docker rmi "docker.io/${image_name}:${TAG}"
+        sudo docker rmi "docker.io/${image_name}:${DOCKER_IMAGE_TAG}"
     fi
-    if sudo docker inspect "${image_name}:${TAG}" &> /dev/null
+    if sudo docker inspect "${image_name}:${DOCKER_IMAGE_TAG}" &> /dev/null
     then
-        sudo docker rmi "${image_name}:${TAG}"
+        sudo docker rmi "${image_name}:${DOCKER_IMAGE_TAG}"
     fi
-    sudo docker tag "${image_name}:latest" "${image_name}:${TAG}"
+    sudo docker tag "${image_name}:latest" "${image_name}:${DOCKER_IMAGE_TAG}"
     sudo docker rmi "${image_name}:latest"
 }
 
@@ -37,14 +37,14 @@ images_to_build=( ${@} )
 for image_name in ${images_to_build[*]}
 do
     case ${image_name} in
-        "${NAME_GITLAB_DV_IMAGE}" | \
-        "${NAME_HTPASSWD_IMAGE}" | \
-        "${NAME_OPENSSL_IMAGE}" | \
-        "${NAME_LDAP_IMAGE}" | \
-        "${NAME_SVN_IMAGE}" | \
-        "${NAME_GIT_IMAGE}" | \
-        "${NAME_WIKI_IMAGE}" | \
-        "${NAME_DJANGO_IMAGE}")   build_image "${image_name}";;
+        "${GITLAB_DV_IMAGE_NAME}" | \
+        "${HTPASSWD_IMAGE_NAME}" | \
+        "${OPENSSL_IMAGE_NAME}" | \
+        "${OPENLDAP_IMAGE_NAME}" | \
+        "${SVN_IMAGE_NAME}" | \
+        "${GIT_IMAGE_NAME}" | \
+        "${WIKI_IMAGE_NAME}" | \
+        "${DJANGO_IMAGE_NAME}")   build_image "${image_name}";;
         *)
             printf 'Available images:\n'
             for image_name in ${ALL_IMAGES[*]}

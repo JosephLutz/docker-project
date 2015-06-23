@@ -55,20 +55,20 @@ case ${1} in
         ;;
 esac
 
-sudo docker inspect ${NAME_WIKI_CONTAINER} > /dev/null
-sudo docker inspect ${NAME_WIKI_MYSQL_CONTAINER} > /dev/null
-sudo docker inspect ${NAME_WIKI_DV} > /dev/null
-sudo docker inspect ${NAME_WIKI_MYSQL_DV} > /dev/null
+sudo docker inspect ${WIKI_CONTAINER_NAME} > /dev/null
+sudo docker inspect ${WIKI_DB_CONTAINER_NAME} > /dev/null
+sudo docker inspect ${WIKI_DV_NAME} > /dev/null
+sudo docker inspect ${WIKI_DB_DV_NAME} > /dev/null
 
 printf 'Waiting for MySQL database to finish starting up.  '
 while ! \
     echo "SHOW GLOBAL STATUS;" | \
     sudo docker exec -i \
-      "${NAME_WIKI_MYSQL_CONTAINER}" \
+      "${WIKI_DB_CONTAINER_NAME}" \
       mysql \
         --host=localhost \
-        --user="${MEDIAWIKI_USER}" \
-        --password="${MEDIAWIKI_PASSWORD}" \
+        --user="${WIKI_DB_USER}" \
+        --password="${WIKI_DB_PASSWORD}" \
         wikidb &> /dev/null
 do
   sleep 1
@@ -81,10 +81,10 @@ echo 'MySQL database is running'
 
 # ************************************************************
 # set mediawiki to readonly database
-sudo docker exec ${NAME_WIKI_CONTAINER} ls /var/www-shared/html/LocalSettings.php &> /dev/null && {
+sudo docker exec ${WIKI_CONTAINER_NAME} ls /var/www-shared/html/LocalSettings.php &> /dev/null && {
     echo "Lock mediawiki making the database read only"
     sudo docker exec \
-      ${NAME_WIKI_CONTAINER} /bin/sed \
+      ${WIKI_CONTAINER_NAME} /bin/sed \
         -i \
         's|^#wgReadOnly$|$wgReadOnly = '"'Restoring Database from backup, Access will be restored shortly.'"';|' \
         /var/www-shared/html/LocalSettings.php
@@ -121,7 +121,7 @@ case ${1} in
             echo "Backing up mediawiki static files"
             sudo true
             sudo docker exec \
-              ${NAME_WIKI_CONTAINER} /bin/tar \
+              ${WIKI_CONTAINER_NAME} /bin/tar \
                 --create \
                 --preserve-permissions \
                 --same-owner \
@@ -138,11 +138,11 @@ case ${1} in
         then
             echo "Backing up the mediawiki database"
             sudo docker exec \
-              "${NAME_WIKI_MYSQL_CONTAINER}" \
+              "${WIKI_DB_CONTAINER_NAME}" \
               mysqldump \
                 --host=localhost \
-                --user="${MEDIAWIKI_USER}" \
-                --password="${MEDIAWIKI_PASSWORD}" \
+                --user="${WIKI_DB_USER}" \
+                --password="${WIKI_DB_PASSWORD}" \
                 --add-drop-table \
                 --flush-privileges \
                 --hex-blob \
@@ -184,7 +184,7 @@ case ${1} in
             sudo true
             cat ${BACKUP_DIR}/${STATIC_BACKUP_FILE} | \
             sudo docker exec -i \
-              ${NAME_WIKI_CONTAINER} \
+              ${WIKI_CONTAINER_NAME} \
               /bin/tar \
                 --extract \
                 --preserve-permissions \
@@ -194,7 +194,7 @@ case ${1} in
                 -f -
             echo "Set hostname/wgServer for mediawiki"
             sudo docker exec \
-              ${NAME_WIKI_CONTAINER} \
+              ${WIKI_CONTAINER_NAME} \
               /bin/sed -ie \
                 's|$wgServer = "http://.*|$wgServer = "http://'${WIKI_HOSTNAME}'";|' \
                 /var/www-shared/html/LocalSettings.php
@@ -208,11 +208,11 @@ case ${1} in
             sudo true
             cat ${BACKUP_DIR}/${DATABASE_BACKUP_FILE} | \
             sudo docker exec -i \
-              "${NAME_WIKI_MYSQL_CONTAINER}" \
+              "${WIKI_DB_CONTAINER_NAME}" \
               mysql \
                 --host=localhost \
-                --user="${MEDIAWIKI_USER}" \
-                --password="${MEDIAWIKI_PASSWORD}" \
+                --user="${WIKI_DB_USER}" \
+                --password="${WIKI_DB_PASSWORD}" \
                 wikidb
         fi
 
@@ -223,7 +223,7 @@ case ${1} in
             printf 'Waiting for mediwiki to finish starting up.  '
             while ! \
                 sudo docker exec \
-                  "${NAME_WIKI_CONTAINER}" \
+                  "${WIKI_CONTAINER_NAME}" \
                   ls /var/www/html/maintenance/update.php &> /dev/null
             do
               sleep 1
@@ -232,7 +232,7 @@ case ${1} in
             printf '\n'
             echo "Converting the mediawiki database to latest"
             sudo docker exec \
-              "${NAME_WIKI_CONTAINER}" \
+              "${WIKI_CONTAINER_NAME}" \
               /usr/local/bin/php \
                 /var/www/html/maintenance/update.php \
                 --quick
@@ -244,7 +244,7 @@ esac
 # set mediawiki to read/write database
 echo "UnLock mediawiki making the database read/write"
 sudo docker exec \
-  ${NAME_WIKI_CONTAINER} /bin/sed \
+  ${WIKI_CONTAINER_NAME} /bin/sed \
     -i \
     's|^$wgReadOnly = .*;$|#wgReadOnly|' \
     /var/www-shared/html/LocalSettings.php

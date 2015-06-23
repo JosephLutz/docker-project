@@ -18,22 +18,22 @@ printf '***************************************\n'
 printf 'Images used as they are\n'
 
 printf 'remove old tags\n'
-sudo docker inspect mysql:${TAG} &> /dev/null && \
-    sudo docker rmi mysql:${TAG}
-sudo docker inspect postgres:${TAG} &> /dev/null && \
-    sudo docker rmi postgres:${TAG}
-sudo docker inspect redis:${TAG} &> /dev/null && \
-    sudo docker rmi redis:${TAG}
-sudo docker inspect corbinu/docker-phpmyadmin:${TAG} &> /dev/null && \
-    sudo docker rmi corbinu/docker-phpmyadmin:${TAG}
-sudo docker inspect sameersbn/gitlab:${TAG} &> /dev/null && \
-    sudo docker rmi sameersbn/gitlab:${TAG}
+sudo docker inspect mysql:${DOCKER_IMAGE_TAG} &> /dev/null && \
+    sudo docker rmi mysql:${DOCKER_IMAGE_TAG}
+sudo docker inspect postgres:${DOCKER_IMAGE_TAG} &> /dev/null && \
+    sudo docker rmi postgres:${DOCKER_IMAGE_TAG}
+sudo docker inspect redis:${DOCKER_IMAGE_TAG} &> /dev/null && \
+    sudo docker rmi redis:${DOCKER_IMAGE_TAG}
+sudo docker inspect corbinu/docker-phpmyadmin:${DOCKER_IMAGE_TAG} &> /dev/null && \
+    sudo docker rmi corbinu/docker-phpmyadmin:${DOCKER_IMAGE_TAG}
+sudo docker inspect sameersbn/gitlab:${DOCKER_IMAGE_TAG} &> /dev/null && \
+    sudo docker rmi sameersbn/gitlab:${DOCKER_IMAGE_TAG}
 
 printf 'add new tags\n'
-sudo docker tag mysql:5 mysql:${TAG}
-sudo docker tag postgres:9.4 postgres:${TAG}
-sudo docker tag redis:3.0 redis:${TAG}
-sudo docker tag corbinu/docker-phpmyadmin:latest corbinu/docker-phpmyadmin:${TAG}
-sudo docker tag sameersbn/gitlab:latest sameersbn/gitlab:${TAG}
+sudo docker tag mysql:5 mysql:${DOCKER_IMAGE_TAG}
+sudo docker tag postgres:9.4 postgres:${DOCKER_IMAGE_TAG}
+sudo docker tag redis:3.0 redis:${DOCKER_IMAGE_TAG}
+sudo docker tag corbinu/docker-phpmyadmin:latest corbinu/docker-phpmyadmin:${DOCKER_IMAGE_TAG}
+sudo docker tag sameersbn/gitlab:latest sameersbn/gitlab:${DOCKER_IMAGE_TAG}
 
 printf '***************************************\n'

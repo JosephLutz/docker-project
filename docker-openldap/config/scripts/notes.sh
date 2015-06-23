@@ -32,12 +32,12 @@ build_image() {
 }
 
 
-build_image ${NAME_LDAP_IMAGE}
+build_image ${OPENLDAP_IMAGE_NAME}
 
-sudo docker inspect ${NAME_LDAP_DV} &> /dev/null || \
-sudo docker run -ti --name "${NAME_LDAP_DV}" --entrypoint="/bin/true" ${NAME_LDAP_IMAGE}:${TAG}
+sudo docker inspect ${OPENLDAP_DV_NAME} &> /dev/null || \
+sudo docker run -ti --name "${OPENLDAP_DV_NAME}" --entrypoint="/bin/true" ${OPENLDAP_IMAGE_NAME}:${TAG}
 
-sudo docker run -ti --rm --volumes-from "${NAME_LDAP_DV}" ${NAME_LDAP_IMAGE}:${TAG} /bin/bash
+sudo docker run -ti --rm --volumes-from "${OPENLDAP_DV_NAME}" ${OPENLDAP_IMAGE_NAME}:${TAG} /bin/bash
 #	apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends vim slapd ldap-utils openssl ca-certificates
 #	cd /etc
 #	tar -xaf ldap.tar.gz

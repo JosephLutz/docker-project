@@ -19,11 +19,11 @@ create_data_volume() {
     local image_name
     datavolume_name=${1}
     image_name=${2}
-    printf "Datavolume [%s] from image [%s]\n" "${datavolume_name}" "${image_name}:${TAG}"
+    printf "Datavolume [%s] from image [%s]\n" "${datavolume_name}" "${image_name}:${DOCKER_IMAGE_TAG}"
     sudo docker inspect ${datavolume_name} &> /dev/null || \
         sudo docker run -ti --name "${datavolume_name}" \
             --entrypoint="/bin/true" \
-            ${image_name}:${TAG}
+            ${image_name}:${DOCKER_IMAGE_TAG}
 }
 
 services=( ${@} )
@@ -33,18 +33,18 @@ services=( ${@} )
 for service_name in ${services[*]}
 do
     case ${service_name} in
-        htpasswd)   create_data_volume "${NAME_HTPASSWD_DV}" "${NAME_HTPASSWD_IMAGE}";;
-        openssl)    create_data_volume "${NAME_OPENSSL_DV}" "${NAME_OPENSSL_IMAGE}";;
-        ldap)       create_data_volume "${NAME_LDAP_DV}" "${NAME_LDAP_IMAGE}";;
-        svn)        create_data_volume "${NAME_SVN_REPO_DV}" "${NAME_SVN_IMAGE}";;
-        git)        create_data_volume "${NAME_GIT_REPO_DV}" "${NAME_GIT_IMAGE}";;
-        gitlab)     create_data_volume "${NAME_GITLAB_REPO_DV}" "${NAME_GITLAB_DV_IMAGE}"
-                    create_data_volume "${NAME_GITLAB_POSTGRES_DV}" "postgres"
+        htpasswd)   create_data_volume "${HTPASSWD_DV_NAME}" "${HTPASSWD_IMAGE_NAME}";;
+        openssl)    create_data_volume "${OPENSSL_DV_NAME}" "${OPENSSL_IMAGE_NAME}";;
+        ldap)       create_data_volume "${OPENLDAP_DV_NAME}" "${OPENLDAP_IMAGE_NAME}";;
+        svn)        create_data_volume "${SVN_DV_NAME}" "${SVN_IMAGE_NAME}";;
+        git)        create_data_volume "${GIT_DV_NAME}" "${GIT_IMAGE_NAME}";;
+        gitlab)     create_data_volume "${GITLAB_DV_NAME}" "${GITLAB_DV_IMAGE_NAME}"
+                    create_data_volume "${GITLAB_DB_DV_NAME}" "postgres"
                     ;;
-        wiki)       create_data_volume "${NAME_WIKI_MYSQL_DV}" "mysql"
-                    create_data_volume "${NAME_WIKI_DV}" "${NAME_WIKI_IMAGE}"
+        wiki)       create_data_volume "${WIKI_DB_DV_NAME}" "mysql"
+                    create_data_volume "${WIKI_DV_NAME}" "${WIKI_IMAGE_NAME}"
                     ;;
-        phpmyadmin) create_data_volume "${NAME_PHPMYADMIN_MYSQL_DV}" "mysql";;
+        phpmyadmin) create_data_volume "${PHPMYADMIN_DB_DV_NAME}" "mysql";;
         django)     ;;
         *)
             printf 'Available services:\n'

@@ -35,47 +35,47 @@ do
             ;;
 
         htpasswd)
-            ./go.build.images.sh ${NAME_HTPASSWD_IMAGE}
+            ./go.build.images.sh ${HTPASSWD_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ;;
 
         openssl)
-            ./go.build.images.sh ${NAME_OPENSSL_IMAGE}
+            ./go.build.images.sh ${OPENSSL_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ;;
 
         ldap)
-            ./go.build.images.sh ${NAME_LDAP_IMAGE}
+            ./go.build.images.sh ${OPENLDAP_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"
             ;;
 
         svn)
-            ./go.build.images.sh ${NAME_SVN_IMAGE}
+            ./go.build.images.sh ${SVN_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"
             ;;
 
         git)
-            ./go.build.images.sh ${NAME_GIT_IMAGE}
+            ./go.build.images.sh ${GIT_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"
             ;;
 
         gitlab)
-            ./go.build.images.sh ${NAME_GITLAB_DV_IMAGE}
+            ./go.build.images.sh ${GITLAB_DV_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"
             ;;
 
         wiki)
-            ./go.build.images.sh ${NAME_WIKI_IMAGE}
+            ./go.build.images.sh ${WIKI_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"
@@ -88,7 +88,7 @@ do
             ;;
 
         django)
-            ./go.build.images.sh ${NAME_DJANGO_IMAGE}
+            ./go.build.images.sh ${DJANGO_IMAGE_NAME}
             ./go.create.volumes.sh "${service_name}"
             ./go.populate.volumes.sh "${service_name}"
             ./go.start.sh  "${service_name}"
