@@ -21,7 +21,7 @@ case ${1} in
             --env="DB_USER=${GITLAB_DB_USER}" \
             --env="DB_PASS=${GITLAB_DB_PASSWORD}" \
             -v ${HOST_GITLAB_BACKUP_DIR}/:/tmp/import_export \
-            ${GITLAB_IMAGE_NAME}:${TAG} \
+            ${GITLAB_IMAGE_NAME}:${DOCKER_IMAGE_TAG} \
                 /tmp/import_export/backup_script.sh
         sudo rm ${HOST_GITLAB_BACKUP_DIR}/backup_script.sh
         sudo docker start "${GITLAB_CONTAINER_NAME}"
@@ -54,7 +54,7 @@ case ${1} in
             --env-file=./gitlab.env.list \
             --env="DB_USER=${GITLAB_DB_USER}" \
             --env="DB_PASS=${GITLAB_DB_PASSWORD}" \
-            ${GITLAB_IMAGE_NAME}:${TAG} \
+            ${GITLAB_IMAGE_NAME}:${DOCKER_IMAGE_TAG} \
                 /tmp/import_export/restore_script.sh
         sudo rm ${HOST_GITLAB_BACKUP_DIR}/restore_script.sh
         sudo docker start "${GITLAB_CONTAINER_NAME}"
@@ -80,7 +80,7 @@ case ${1} in
             --env-file=./gitlab.env.list \
             --env="DB_USER=${GITLAB_DB_USER}" \
             --env="DB_PASS=${GITLAB_DB_PASSWORD}" \
-            ${GITLAB_IMAGE_NAME}:${TAG} \
+            ${GITLAB_IMAGE_NAME}:${DOCKER_IMAGE_TAG} \
                 /tmp/import_export/import_script.sh
         sudo rm ${HOST_GITLAB_BACKUP_DIR}/repositories/import_script.sh
         sudo docker start "${GITLAB_CONTAINER_NAME}"

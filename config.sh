@@ -67,6 +67,8 @@ DOCKER_REGISTRY_USERNAME=novatechweb
   WIKI_DB_ROOT_PASSWORD=database-root-user-secret-pw
   WIKI_DB_USER=novatech
   WIKI_DB_PASSWORD=novatech
+  STATIC_BACKUP_FILE="mediawiki.tar"
+  DATABASE_BACKUP_FILE="wikidb.sql"
 }
 
 { # variables for PHPMyAdmin

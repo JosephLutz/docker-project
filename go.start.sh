@@ -126,7 +126,7 @@ do
                 -P -p ${GITLAB}:443 -p ${GITLAB_OPEN}:80 -p ${GITLAB_SSH}:22 \
                 --volumes-from "${OPENSSL_DV_NAME}" \
                 --volumes-from "${GITLAB_DV_NAME}" \
-                --env-file=./gitlab.env.list \
+                --env-file=./docker-gitlab/gitlab.env.list \
                 --env="GITLAB_HOST=${GITLAB_HOSTNAME}" \
                 --env="GITLAB_SSH_HOST=${GITLAB_HOSTNAME}" \
                 --env="DB_USER=${GITLAB_DB_USER}" \

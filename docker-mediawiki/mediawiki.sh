@@ -3,31 +3,28 @@
 source config.sh
 set -e
 
-STATIC_BACKUP_FILE="WIKI/mediawiki.tar"
-DATABASE_BACKUP_FILE="WIKI/wikidb.sql"
-
 # ************************************************************
 # check state before performing
 case ${1} in
     backup)
-        if [[ -f ${BACKUP_DIR}/${STATIC_BACKUP_FILE} ]] ; then
-            echo "Removing existing backup file: ${BACKUP_DIR}/${STATIC_BACKUP_FILE}"
-            rm -f ${BACKUP_DIR}/${STATIC_BACKUP_FILE}
+        if [[ -f ${HOST_WIKI_BACKUP_DIR}/${STATIC_BACKUP_FILE} ]] ; then
+            echo "Removing existing backup file: ${STATIC_BACKUP_FILE}"
+            rm -f ${HOST_WIKI_BACKUP_DIR}/${STATIC_BACKUP_FILE}
         fi
-        if [[ -f ${BACKUP_DIR}/${DATABASE_BACKUP_FILE} ]] ; then
-            echo "Removing existing backup file: ${BACKUP_DIR}/${DATABASE_BACKUP_FILE}"
-            rm -f ${BACKUP_DIR}/${DATABASE_BACKUP_FILE}
+        if [[ -f ${HOST_WIKI_BACKUP_DIR}/${DATABASE_BACKUP_FILE} ]] ; then
+            echo "Removing existing backup file: ${DATABASE_BACKUP_FILE}"
+            rm -f ${HOST_WIKI_BACKUP_DIR}/${DATABASE_BACKUP_FILE}
         fi
         ;;
 
     restore)
         error="FALSE"
-        if [[ ! -f ${BACKUP_DIR}/${STATIC_BACKUP_FILE} ]] ; then
-            echo "[ERROR] File not found: ${BACKUP_DIR}/${STATIC_BACKUP_FILE}"
+        if [[ ! -f ${HOST_WIKI_BACKUP_DIR}/${STATIC_BACKUP_FILE} ]] ; then
+            echo "[ERROR] File not found: ${STATIC_BACKUP_FILE}"
             error="TRUE"
         fi
-        if [[ ! -f ${BACKUP_DIR}/${DATABASE_BACKUP_FILE} ]] ; then
-            echo "[ERROR] File not found: ${BACKUP_DIR}/${DATABASE_BACKUP_FILE}"
+        if [[ ! -f ${HOST_WIKI_BACKUP_DIR}/${DATABASE_BACKUP_FILE} ]] ; then
+            echo "[ERROR] File not found: ${DATABASE_BACKUP_FILE}"
             error="TRUE"
         fi
         if [[ "${error}" == "TRUE" ]] ; then
@@ -128,7 +125,7 @@ case ${1} in
                 --directory=/ \
                 --to-stdout \
                 /var/www-shared/html \
-            > ${BACKUP_DIR}/${STATIC_BACKUP_FILE}
+            > ${HOST_WIKI_BACKUP_DIR}/${STATIC_BACKUP_FILE}
                 #--sort=name \
         fi
 
@@ -148,7 +145,7 @@ case ${1} in
                 --hex-blob \
                 --tz-utc \
                 wikidb \
-            > ${BACKUP_DIR}/${DATABASE_BACKUP_FILE}
+            > ${HOST_WIKI_BACKUP_DIR}/${DATABASE_BACKUP_FILE}
         fi
         ;;
 
@@ -182,7 +179,7 @@ case ${1} in
         then
             echo "Restoring the mediawiki static files backup"
             sudo true
-            cat ${BACKUP_DIR}/${STATIC_BACKUP_FILE} | \
+            cat ${HOST_WIKI_BACKUP_DIR}/${STATIC_BACKUP_FILE} | \
             sudo docker exec -i \
               ${WIKI_CONTAINER_NAME} \
               /bin/tar \
@@ -206,7 +203,7 @@ case ${1} in
         then
             echo "Restoring the mediawiki database backup"
             sudo true
-            cat ${BACKUP_DIR}/${DATABASE_BACKUP_FILE} | \
+            cat ${HOST_WIKI_BACKUP_DIR}/${DATABASE_BACKUP_FILE} | \
             sudo docker exec -i \
               "${WIKI_DB_CONTAINER_NAME}" \
               mysql \
