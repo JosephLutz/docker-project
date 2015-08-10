@@ -4,3 +4,6 @@
 [submodule "docker-openssl"]
 	path = docker-openssl
 	url = git@github.com:novatechweb/docker-openssl.git
+[submodule "docker-openldap"]
+	path = docker-openldap
+	url = git@github.com:cipherwizard/docker-openldap.git
