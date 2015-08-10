@@ -1,3 +1,6 @@
 [submodule "docker-svn"]
 	path = docker-svn
 	url = git@github.com:novatechweb/docker-svn.git
+[submodule "docker-openssl"]
+	path = docker-openssl
+	url = git@github.com:novatechweb/docker-openssl.git
