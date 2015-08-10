@@ -7,3 +7,6 @@
 [submodule "docker-openldap"]
 	path = docker-openldap
 	url = git@github.com:cipherwizard/docker-openldap.git
+[submodule "docker-mediawiki"]
+	path = docker-mediawiki
+	url = git@github.com:novatechweb/docker-mediawiki.git
