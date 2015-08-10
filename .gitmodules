@@ -1,0 +1,3 @@
+[submodule "docker-svn"]
+	path = docker-svn
+	url = git@github.com:novatechweb/docker-svn.git
